@@ -38,6 +38,12 @@ $mytree = new XoopsTree($xoopsDB->prefix("flashgames_cat"),"cid","pid");
 $xoopsOption['template_main'] = 'flashgames_game.html';
 
 $lid = $HTTP_GET_VARS['lid'];
+
+if (!is_numeric($lid) or $lid<=0) 
+{ exit;
+}
+
+
 if(!$full) {
     include(XOOPS_ROOT_PATH."/header.php");
 //    OpenTable();
