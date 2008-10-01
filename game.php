@@ -1,6 +1,4 @@
 <?php
-
-
 // ------------------------------------------------------------------------- //
 //                      flashgames                                           //
 //                     <http://www.tipsmitgrips.de>                          //
@@ -37,12 +35,7 @@ include_once(XOOPS_ROOT_PATH."/class/xoopstree.php");
 $mytree = new XoopsTree($xoopsDB->prefix("flashgames_cat"),"cid","pid");
 $xoopsOption['template_main'] = 'flashgames_game.html';
 
-$lid = $HTTP_GET_VARS['lid'];
-
-if (!is_numeric($lid) or $lid<=0) 
-{ exit;
-}
-
+$lid = intval($_GET['lid']);
 
 if(!$full) {
     include(XOOPS_ROOT_PATH."/header.php");
@@ -162,7 +155,7 @@ $email = $myts->makeTboxData4Show($email);
 $logourl = $myts->makeTboxData4Show($logourl);
 #	$logourl = urldecode($logourl);
 $datetime = formatTimestamp($time,"m");
-$description = $myts->makeTareaData4Show($description,0);
+$description = $myts->displayTarea($description,0);
 
 //PNFG UPDATE: get the game's checksum and domain
 $domain = pnFlashGames_getDomain();
