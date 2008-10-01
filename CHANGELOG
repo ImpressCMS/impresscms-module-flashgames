@@ -1,6 +1,8 @@
 31-09-2008
 
-- added patched game.php to address SQLInjection Vulnerability in lid parameter.
+- added: patched game.php to address SQLInjection Vulnerability in lid parameter.
+
+- changed: references of class/xoopsmodule.php to kernel/module.php (vaughan)
 
 10-13-2005
  - Fixes for AI service support
