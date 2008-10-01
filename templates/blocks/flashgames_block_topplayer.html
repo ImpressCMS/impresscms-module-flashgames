@@ -1,0 +1,11 @@
+<table width="95%" border="0" cellspacing="4" align="center">
+<{foreach item=players from=$block}>
+<tr>
+<td> <{$players.rank}>. <{$players.name}> (<{$players.weight}>)</td>
+</tr>
+<{/foreach}>
+</table>
+<p align="center">
+<a href="<{$xoops_url}>/modules/flashgames/topscorers.php" title="">
+<{$block[1].lang_listall}></a>
+</p>

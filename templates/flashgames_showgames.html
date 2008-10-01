@@ -1,0 +1,37 @@
+<p align="center" style="padding:5px;" class="odd">
+&nbsp;<a href="<{$xoops_url}>/modules/flashgames/game.php?lid=<{$game.id}>" title="<{$game.title}>"><{$game.title}></a>
+&nbsp;&nbsp;<{$game.members}>
+&nbsp;&nbsp;<{$game.ext}>
+</p>
+
+<table align="center" width="90%" cellspacing="0" cellpadding="3" border="0">
+<tr>
+<td width="30%" align="center">
+<{$game.image}>
+</td>
+<td width="70%">
+<{$lang_description}><br /><br />
+<{$game.description}>
+</td>
+</tr>
+</table>
+
+<p align="center">
+<{$lang_lastupdate}>
+<{$game.updated}>
+&nbsp;|&nbsp;
+<{$lang_hits}>
+<{$game.hits}>
+&nbsp;|&nbsp;
+<{if $game.votes == 0}>
+<a href="<{$xoops_url}>/modules/flashgames/rategame.php?lid=<{$game.id}>" title="<{$lang_ratethisgame}>">
+<{$lang_ratethisgame}></a>
+<{else}>
+<{$lang_rating}>
+<{$game.rating}> (<{$game.votes}>)
+&nbsp;|&nbsp;
+<a href="<{$xoops_url}>/modules/flashgames/rategame.php?lid=<{$game.id}>" title="<{$lang_ratethisgame}>">
+<{$lang_ratethisgame}></a>
+<{/if}>&nbsp;&nbsp;
+<{$game.adminlink}>
+</p>

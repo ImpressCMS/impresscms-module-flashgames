@@ -1,0 +1,201 @@
+<html>
+<head>
+<title>FlashGames Automatic Installation Progress...</title>
+<script language="JavaScript">
+self.loaded = true;
+</script>
+<style>
+<!--
+.hide { position:absolute; visibility:hidden; }
+.show { position:absolute; visibility:visible; }
+-->
+</style>
+
+</head>
+<body background="../images/progressbg.jpg" style="background-repeat: none;" onload="self.loaded = true;">
+<SCRIPT LANGUAGE="JavaScript">
+//Progress Bar script- by Todd King (tking@igpp.ucla.edu)
+//Modified by JavaScript Kit for NS6, ability to specify duration
+//Visit JavaScript Kit (http://javascriptkit.com) for script
+
+var duration=3 // Specify duration of progress bar in seconds
+var _progressWidth = 50;// Display width of progress bar
+var _progressBar = new String("");
+
+var _progressEnd1 = 10;
+var _progressEnd2 = 10;
+
+var _progressAt1 = 0;
+var _progressAt2 = 0;
+
+// Create and display the progress dialog.
+// end: The number of steps to completion
+function ProgressCreate(end, title, position) {
+	// Initialize state variables
+	top1 = 65;	
+	top2 = 150;
+	if(position == 1){
+		_progressEnd1 = end;
+		_progressAt1 = 0;
+	}else{
+		_progressEnd2 = end;
+		_progressAt2 = 0;
+	}
+	// Move layer to center of window to show
+	if (document.all) {// Internet Explorer
+		if(position == 1){
+			progress1.className = 'show';
+			progress1.style.left = (document.body.clientWidth/2) - (progress1.offsetWidth/2);
+			//progress1.style.top = document.body.scrollTop + (document.body.clientHeight/2) - (progress1.offsetHeight);
+			progress1.style.top = top1;
+			dialog1.titleText.value = title;
+		}else{
+			progress2.className = 'show';
+			progress2.style.left = (document.body.clientWidth/2) - (progress2.offsetWidth/2);
+			//progress2.style.top = document.body.scrollTop + (document.body.clientHeight/2) + (progress2.offsetHeight);
+			progress2.style.top = top2;
+			dialog2.titleText.value = title;
+		}
+	} else if (document.layers) {// Netscape
+		if(position == 1){
+			document.progress1.visibility = true;
+			document.progress1.left = (window.innerWidth/2) - 100;
+			//document.progress1.top = pageYOffset+(window.innerHeight/2) - 40;
+			document.progress1.top = top1;
+			document.dialog1.titleText.value = title;
+		}else{
+			document.progress2.visibility = true;
+			document.progress2.left = (window.innerWidth/2) - 100;
+			//document.progress2.top = pageYOffset+(window.innerHeight/2) - 40;
+			document.progress2.top = top2;
+			document.dialog2.titleText.value = title;
+		}
+	} else if (document.getElementById) {// Netscape 6+
+		if(position == 1){
+			document.getElementById("progress1").className = 'show';
+			document.getElementById("progress1").style.left = (window.innerWidth/2)- 100;
+			//document.getElementById("progress1").style.top = pageYOffset+(window.innerHeight/2) - 40;
+			document.getElementById("progress1").style.top = top1;
+			document.getElementById("dialog1").titleText.value = title;
+		}else{
+			document.getElementById("progress2").className = 'show';
+			document.getElementById("progress2").style.left = (window.innerWidth/2)- 100;
+			//document.getElementById("progress2").style.top = pageYOffset+(window.innerHeight/2) - 40;
+			document.getElementById("progress2").style.top = top2;
+			document.getElementById("dialog2").titleText.value = title;
+		}
+	}
+	ProgressUpdate(position);// Initialize bar
+}
+
+// Hide the progress layer
+function ProgressDestroy(position) {
+	// Move off screen to hide
+	if (document.all) {// Internet Explorer
+		if(position == 1){
+			progress1.className = 'hide';
+		}else{
+			progress2.className = 'hide';
+		}
+	} else if (document.layers) {// Netscape
+		if(position == 1){
+			document.progress1.visibility = false;
+		}else{
+			document.progress2.visibility = false;
+		}
+	} else if (document.getElementById) {// Netscape 6+
+		if(position == 1){
+			document.getElementById("progress1").className = 'hide';
+		}else{
+			document.getElementById("progress2").className = 'hide';
+		}
+	}
+}
+
+// Increment the progress dialog one step
+function ProgressStepIt(position) {
+	if(position == 1){
+		_progressAt1++;
+		if(_progressAt1 > _progressEnd1) _progressAt1 = _progressAt1 % _progressEnd1;
+			ProgressUpdate(position);
+	}else{
+		_progressAt2++;
+		if(_progressAt2 > _progressEnd2) _progressAt2 = _progressAt2 % _progressEnd2;
+			ProgressUpdate(position);
+	}
+}
+
+// Update the progress dialog with the current state
+function ProgressUpdate(position) {
+	if(position == 1){
+		var n = (_progressWidth / _progressEnd1) * _progressAt1;
+	}else{
+		var n = (_progressWidth / _progressEnd2) * _progressAt2;
+	}
+	if (document.all) {// Internet Explorer
+		if(position == 1){
+			var bar = dialog1.bar;
+		}else{
+			var bar = dialog2.bar;
+		}			
+	} else if (document.layers) {// Netscape
+		if(position == 1){
+			var bar = document.layers["progress1"].document.forms["dialog1"].bar;
+		}else{
+			var bar = document.layers["progress2"].document.forms["dialog2"].bar;
+		}	
+		n = n * 0.55;// characters are larger
+	} else if (document.getElementById){
+	    if(position == 1){
+			var bar=document.dialog1.bar;
+		}else{
+			var bar=document.dialog2.bar;
+		}
+	}
+	
+	var temp = _progressBar.substring(0, n);
+	bar.value = temp;
+}
+</script>
+<SCRIPT LANGUAGE="JavaScript">
+// Create layer for position 1 game progress dialog
+document.write("<span id=\"progress1\" class=\"hide\">");
+document.write("<FORM name=dialog1>");
+document.write("<TABLE border=2  bgcolor=\"#FFFFCC\">");
+document.write("<TR><TD ALIGN=\"center\">");
+document.write("<input type=text name=\"titleText\" size=\"25\" readonly><br>");
+document.write("<input type=text name=\"bar\" size=\"" + _progressWidth/2 + "\"");
+if(document.all||document.getElementById) // Microsoft, NS6
+	document.write(" bar.style=\"color:navy;\">");
+else// Netscape
+	document.write(">");
+document.write("</TD></TR>");
+document.write("</TABLE>");
+document.write("</FORM>");
+document.write("</span>");
+ProgressDestroy(1);// Hides
+
+// Create layer for position 1 game progress dialog
+document.write("<span id=\"progress2\" class=\"hide\">");
+document.write("<FORM name=dialog2>");
+document.write("<TABLE border=2  bgcolor=\"#FFFFCC\">");
+document.write("<TR><TD ALIGN=\"center\">");
+document.write("<input type=text name=\"titleText\" size=\"25\" readonly><br>");
+document.write("<input type=text name=\"bar\" size=\"" + _progressWidth/2 + "\"");
+if(document.all||document.getElementById) // Microsoft, NS6
+	document.write(" bar.style=\"color:navy;\">");
+else// Netscape
+	document.write(">");
+document.write("</TD></TR>");
+document.write("</TABLE>");
+document.write("</FORM>");
+document.write("</span>");
+ProgressDestroy(2);// Hides
+</script>
+<div align="center">Closing this window will not interfere with the installation process...<br>
+<a href="javascript:window.close();">Close this window</a></div>
+<script language="JavaScript">
+self.loaded = true;
+</script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<p class="fltitel"><{$category_path}><{$game_title}></p>
+<p align="center"><{$game_nav}></p>
+
+<{if $game.members != 2}>
+<div align="center"><{$flashgames_notloggedin}></div><br />
+<{/if}>
+
+<{include file="db:flashgames_gameformat.html" link=$link}>
+
+<!-- OKA start -->
+
+<{if $gametype <> "0"}>
+<br />
+<table align="center" width="70%" class="outer" cellspacing="1" border="0">
+  <tr>
+    <th colspan="4" align="center"><{$lang_halloffame}></th>
+  </tr>
+  <tr>
+    <th align="center"><{$lang_rang}></th>
+    <th align="center"><{$lang_name}></th>
+    <th align="center"><{$lang_score}></th>
+    <th align="center"><{$lang_date}></th>
+  </tr>
+<{foreach item=score from=$halloffamescores}>
+<{if $score.rang <= 10}>
+ <tr class="<{cycle values="even,odd"}>">
+ <td align="center"><{$score.rang}></td>
+ <td align="center"><{$score.name}></td>
+ <td align="center"><{$score.score}></td>
+ <td align="center"><{$score.date}></td>
+ </tr>
+<{/if}>
+  <{/foreach}>
+</table>
+<{/if}>
+<!-- OKa ende -->
+<br /><br />
+<div style="text-align: center; padding: 3px; margin: 3px;">
+  <{$commentsnav}>
+  <{$lang_notice}>
+</div>
+
+<div style="margin: 3px; padding: 3px;">
+<!-- start comments loop -->
+<{if $comment_mode == "flat"}>
+  <{include file="db:system_comments_flat.html"}>
+<{elseif $comment_mode == "thread"}>
+  <{include file="db:system_comments_thread.html"}>
+
+<{elseif $comment_mode == "nest"}>
+  <{include file="db:system_comments_nest.html"}>
+<{/if}>
+<!-- end comments loop -->
+</div>
+
+<p align="center">
+<{$flashgames_footer}>
+</p>

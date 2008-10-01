@@ -1,0 +1,7 @@
+- Unzip in "modules" directory.
+- chmod 777 cache, photos and photos/thumbs directories (in unix systems).
+- Give the right permitions in XOOPS admin.
+- Create a Categorie in the photo album admin section.
+- Start uploading photos! :)
+
+daniel

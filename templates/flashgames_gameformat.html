@@ -1,0 +1,57 @@
+<script language="JavaScript">
+<!--
+function refreshScores(){
+	// Keep this function here, even if its empty
+}
+//-->
+</script>
+
+<table cellspacing="0" width="95%" cellpadding="0" border="0" align="center">
+<tr>
+<td align="center" valign="top">
+<{if $game.members  <>2}>
+<{if $game.ext == "swf"}>
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" width="<{$game.res_x}>" height="<{$game.res_y}>">
+<param name=movie value="<{$xoops_url}>/modules/flashgames/games/<{$game.id}>.<{$game.ext}>?pn_gid=<{$game.id}>&pn_uname=<{$username}>&pn_domain=<{$game.domain}>&pn_checksum=<{$game.checksum}>&pn_license=<{$game.license}>">
+<param NAME=quality VALUE=high>
+<param NAME=menu VALUE=false>
+<param NAME=bgcolor VALUE=<{$game.bgcolor}>>
+<embed src="<{$xoops_url}>/modules/flashgames/games/<{$game.id}>.<{$game.ext}>?pn_gid=<{$game.id}>&pn_uname=<{$username}>&pn_domain=<{$game.domain}>&pn_checksum=<{$game.checksum}>&pn_license=<{$game.license}>" quality=high menu=false pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash" type="application/x-shockwave-flash" width="<{$game.res_x}>" height="<{$game.res_y}>" bgcolor="<{$game.bgcolor}>">
+</embed>
+</object>
+<{else}>
+<applet archive="<{$game.id}>.<{$game.ext}>" code="<{$game.classfile}>" CODEBASE="<{$xoops_url}>/modules/flashgames/games/" name="<{$game.id}>"  width="<{$game.res_x}>" height="<{$game.res_y}>" >
+<param name="gid" value="<{$game.id}>">
+ </applet>
+<{/if}>
+<{else}>
+<img src="<{$xoops_url}>/modules/flashgames/images/membersonly.jpg" alt="">
+<p align="center"><{$lang_notamember}></p>
+<{/if}>
+</td>
+</tr>
+</table>
+
+
+<!-- OKA start
+< these parts were deactivated, if you need it just activate it
+<table width="100%" cellspacing="0" cellpadding="10" border="0">
+ <tr>
+  <td align="left">
+
+    <{$game.admin}>
+    <b><{$game.title}></b><br />
+    <b><{$lang_description}></b>
+    <div style="text-align: justify"><{$game.description}></div>
+    <b><{$lang_lastupdate}></b><{$game.datetime}>&nbsp;
+    <b><{$lang_hits}></b><{$game.hits}>&nbsp;
+    <b><{$lang_rating}></b><{$game.rating}> (<{$game.votes}>)&nbsp;
+    <b><{$lang_comments}></b> <{$game.comments}><br />
+<a href="<{$xoops_url}>/modules/flashgames/rategame.php?lid=<{$game.id}>"><{$lang_ratethissite}></a> |
+    <a target="_top" href="mailto:?subject=<{$game.mail_subject}>&amp;body=<{$game.mail_body}>">
+    <{$lang_tellafriend}></a>
+
+    </td>
+  </tr>
+</table>
+-->

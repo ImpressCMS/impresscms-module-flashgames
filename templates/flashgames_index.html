@@ -1,0 +1,47 @@
+<p align="center">
+<a href="<{$xoops_url}>/modules/flashgames/index.php" title="">
+<img src="<{$xoops_url}>/modules/flashgames/images/logo.gif" alt="" />
+</a>
+</p>
+
+<{if count($categories) gt 0}>
+<hr />
+<table cellspacing="5" cellpadding="5" align="center" border="0" style="width:80%;">
+ <tr>
+<!-- Start category loop -->
+<{foreach item=category from=$categories}>
+<td valign="top">
+<{if $category.image != ""}>
+<a href="<{$xoops_url}>/modules/flashgames/viewcat.php?cid=<{$category.id}>" title=""><img src="<{$category.image}>" width="50" height="50" alt="" /></a>
+<{/if}>
+</td>
+<td valign="top" width="40%">
+<a href="<{$xoops_url}>/modules/flashgames/viewcat.php?cid=<{$category.id}>" title="<{$category.title}>">
+<{$category.title}></a>&nbsp;(<{$category.totallink}>)
+<br />
+<{$category.subcategories}>
+</td>
+<{if $category.count is div by 3}>
+</tr>
+<tr>
+<{/if}>
+<{/foreach}>
+<!-- End category loop -->
+</tr>
+</table>
+<p align="center"><{$lang_thereare}></p>
+<hr />
+<{/if}>
+
+<{if $games != ""}>
+<h4><{$lang_latestlistings}></h4>
+
+<!-- Start new link loop -->
+<{section name=i loop=$games}>
+<{include file="db:flashgames_showgames.html" game=$games[i]}>
+<{/section}>
+<!-- End new link loop -->
+<{/if}>
+
+
+<{$dontchange_copyright}>

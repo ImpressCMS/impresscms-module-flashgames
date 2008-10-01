@@ -1,0 +1,41 @@
+<p align="center">
+<a href="<{$xoops_url}>/modules/flashgames/index.php" title="">
+<img src="<{$xoops_url}>/modules/flashgames/images/logo.gif" alt="" />
+</a>
+</p>
+<p align="center" style="font-size:14px;font-weight:bold;"><{$lang_title}></p>
+
+<table width="100%" align="center" cellpadding="0" cellspacing="0" border="0">
+ <tr>
+<!-- Start ranking loop -->
+
+<{foreach item=ranking from=$rankings}>
+ <td style="padding:2px;margin:2px;" align="center">
+
+<p class="even" style="width:90%;">
+<{$ranking.image}>&nbsp <{$ranking.title}>
+</p>
+
+<!-- Start links loop -->
+<{foreach item=link from=$ranking.scores}>
+<{if $link.rank <= 10}>
+<{if $link.name == 'no score'}>
+ <p style="width:80%;" align="center"><{$lang_noscore}></p>
+<{else}>
+ <div style="width:80%;" align="left">
+  <{$link.rank}>. <{$link.name}> <{$link.score}>
+ </div>
+<{/if}>
+<{/if}>
+<{/foreach}>
+<!-- End links loop-->
+
+</td>
+<{if $ranking.count is div by 2}>
+</tr>
+<tr>
+<{/if}>
+<{/foreach}>
+</tr>
+</table>
+<!-- End ranking loop -->

@@ -1,0 +1,10 @@
+<table width="95%" border="0" cellspacing="3" align="center">
+<{foreach item=news from=$block.games}>
+<tr>
+<td><a href="<{$xoops_url}>/modules/flashgames/game.php?lid=<{$news.lid}>" title=""><{$news.title}></a>
+<br />
+<span style="font-size:x-small;">(<{$news.date}>)</span></td>
+</tr>
+<{/foreach}>
+</table>
+

@@ -1,0 +1,25 @@
+<div align="center">
+<a href="<{$xoops_url}>/modules/flashgames/game.php?lid=<{$block.lid}>" title=""><{$block.title}></a>
+<br /> <br />
+<a href="<{$xoops_url}>/modules/flashgames/game.php?lid=<{$block.lid}>" title="">
+<img src="<{$xoops_url}>/modules/flashgames/games/<{$block.lid}>.<{$block.ext}>" alt="<{$block.title}>" width="<{$block.width}>"/></a>
+</div>
+
+<{foreach item=rgame from=$block.rgame}>
+<{if  $block.showranks > 0 }>
+<{if  $rgame.rank > 0 }>
+<br />
+<{$rgame.rank}>. <{$rgame.name}>: <{$rgame.score}>
+<{/if}>
+
+<{if  $rgame.noscores == 1}>
+<{$rgame.lang_noscores}>
+<br />
+<a href="<{$xoops_url}>/modules/flashgames/game.php?lid=<{$block.lid}>" title=""><{$rgame.lang_setscores}></a>
+<{/if}>
+<{/if}>
+<{/foreach}>
+
+<p align="center">
+<a href="<{$xoops_url}>/modules/flashgames/index.php" title=""><{$block.lang_playanother}></a>
+</p>

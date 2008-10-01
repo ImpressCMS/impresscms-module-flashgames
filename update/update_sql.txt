@@ -1,0 +1,20 @@
+# phpMyAdmin MySQL-Dump
+# version 2.2.2
+# http://phpwizard.net/phpMyAdmin/
+# http://phpmyadmin.sourceforge.net/ (download page)
+#
+# --------------------------------------------------------
+
+#
+# Table structure for table `flashgames_games`
+#
+
+ALTER TABLE xoops_flashgames_games  
+  add classfile varchar(100) default NULL;
+  
+# --------------------------------------------------------
+
+ALTER  TABLE xoops_flashgames_score 
+change score   score double NOT NULL default '0',
+add  playTime BIGINT NOT NULL;
+ 
