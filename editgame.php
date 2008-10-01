@@ -32,64 +32,56 @@ extract($_GET);
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
   
-include("../../mainfile.php");
-include_once(XOOPS_ROOT_PATH."/class/xoopsmodule.php");
-//include(XOOPS_ROOT_PATH."/include/cp_functions.php");
+include '../../mainfile.php';
+require_once XOOPS_ROOT_PATH.'/kernel/module.php';
 
 global $xoopsDB, $flashgames_allowdelete;
 
-
-$result = $xoopsDB->query("SELECT l.submitter FROM ".$xoopsDB->prefix("flashgames_games")." l, ".$xoopsDB->prefix("flashgames_text")." t where l.lid=$lid",0);
+$lid = intval($lid);
+$result = $xoopsDB->query("SELECT l.submitter FROM ".$xoopsDB->prefix('flashgames_games')." l, ".$xoopsDB->prefix('flashgames_text')." t where l.lid=$lid",0);
 list($submitter) = $xoopsDB->fetchRow($result);
 
-include(XOOPS_ROOT_PATH."/modules/flashgames/cache/config.php");
+include XOOPS_ROOT_PATH.'/modules/flashgames/cache/config.php';
 
-if ( $xoopsUser ) {
-	$xoopsModule = XoopsModule::getByDirname("flashgames");
-    if ( !(  ($xoopsUser->uid() == $submitter and $flashgames_allowdelete) or $xoopsUser->isAdmin($xoopsModule->mid()) ) ) {
-		redirect_header(XOOPS_URL."/",3,_NOPERM);
-		exit();
-	}
-} else {
-	redirect_header(XOOPS_URL."/",3,_NOPERM);
-	exit();
+if($xoopsUser)
+{
+	$xoopsModule = XoopsModule::getByDirname('flashgames');
+	if(!(($xoopsUser->uid() == $submitter and $flashgames_allowdelete) or $xoopsUser->isAdmin($xoopsModule->mid()))) {redirect_header(XOOPS_URL.'/',3,_NOPERM);}
 }
+else {redirect_header(XOOPS_URL.'/',3,_NOPERM);}
 
-
-include(XOOPS_ROOT_PATH."/modules/flashgames/include/functions.php");
-include_once(XOOPS_ROOT_PATH."/class/xoopstree.php");
-include_once(XOOPS_ROOT_PATH."/class/module.errorhandler.php");
-include_once(XOOPS_ROOT_PATH."/class/xoopsformloader.php");
-include_once(XOOPS_ROOT_PATH."/class/xoopscomments.php");
-include_once(XOOPS_ROOT_PATH."/class/xoopslists.php");
-include(XOOPS_ROOT_PATH."/modules/flashgames/class/upload.class.php");
-
+include XOOPS_ROOT_PATH.'/modules/flashgames/include/functions.php';
+include_once XOOPS_ROOT_PATH.'/class/xoopstree.php';
+include_once XOOPS_ROOT_PATH.'/class/module.errorhandler.php';
+include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
+include_once XOOPS_ROOT_PATH.'/class/xoopscomments.php';
+include_once XOOPS_ROOT_PATH.'/class/xoopslists.php';
+include XOOPS_ROOT_PATH.'/modules/flashgames/class/upload.class.php';
 
 global $myts, $xoopsDB, $xoopsConfig, $xoopsModule;
 
-$myts =& MyTextSanitizer::getInstance();// MyTextSanitizer object
-$eh = new ErrorHandler; //ErrorHandler object
-$mytree = new XoopsTree($xoopsDB->prefix("flashgames_cat"),"cid","pid");
+$myts =& MyTextSanitizer::getInstance();
+$eh = new ErrorHandler;
+$mytree = new XoopsTree($xoopsDB->prefix('flashgames_cat'),'cid','pid');
 
-function update($lid, $cid, $title,  $desc, $setdate, $valid, $membersonly, $gtyp, $license="", $classfile="",  $x = "", $y = "", $bgcolor="", $ext = "") {
+function update($lid, $cid, $title,  $desc, $setdate, $valid, $membersonly, $gtyp, $license="", $classfile="",  $x = "", $y = "", $bgcolor="", $ext = "")
+{
 	global $myts, $xoopsDB, $xoopsConfig, $xoopsModule;
 
-
-	if(isset($setdate)) {	
-
+	if(isset($setdate))
+	{
 		mysql_query("UPDATE ".$xoopsDB->prefix("flashgames_games")." 
 			SET cid='$cid',title='$title', status='$valid', date=".time().", gametype='$gtyp', res_x='$x', res_y='$y', bgcolor='$bgcolor', license='$license', classfile='$classfile', members='$membersonly' 
 			WHERE lid='$lid'");
-	
-
-	} else {
+	}
+	else
+	{
 		mysql_query("UPDATE ".$xoopsDB->prefix("flashgames_games")." 
 			SET cid='$cid',title='$title', status='$valid', res_x='$x', res_y='$y', bgcolor='$bgcolor', gametype='$gtyp', license='$license', classfile='$classfile', members='$membersonly'  
 			WHERE lid='$lid'");
 	}
 	mysql_query("UPDATE ".$xoopsDB->prefix("flashgames_text")." SET 
 		description='$desc' WHERE lid=".$lid."");
-
 
 	redirect_header("editgame.php?lid=$lid",0);
 }
