@@ -289,9 +289,9 @@ function GetFooter(){
 
 }
 function pnFlashGames_getDomain(){
-    global $HTTP_SERVER_VARS;
-    if(!empty($HTTP_SERVER_VARS['HTTP_HOST'])){
-        $server = $HTTP_SERVER_VARS['HTTP_HOST'];
+    global $_SERVER;
+    if(!empty($_SERVER['HTTP_HOST'])){
+        $server = $_SERVER['HTTP_HOST'];
     }else{
         $server = $_SERVER['HTTP_HOST'];
     }

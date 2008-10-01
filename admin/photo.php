@@ -94,19 +94,19 @@ if(isset($delete) and $delete != "") {
 	exit();
 }
 
-if(isset($HTTP_POST_VARS['submit']) && $HTTP_POST_VARS['submit'] != ""){
+if(isset($_POST['submit']) && $_POST['submit'] != ""){
 	if(!$xoopsUser){
 		redirect_header(XOOPS_URL."/user.php",2,_ALBM_MUSTREGFIRST);
 		exit();
 	} 
 
-   	if(!isset($HTTP_POST_VARS['submitter']) || $HTTP_POST_VARS['submitter']=="") {
+   	if(!isset($_POST['submitter']) || $_POST['submitter']=="") {
    		$submitter = $xoopsUser->uid();
  	} else {
-		$submitter = $HTTP_POST_VARS['submitter'];
+		$submitter = $_POST['submitter'];
 	}
 
-	if(isset($HTTP_POST_VARS['delete'])) {
+	if(isset($_POST['delete'])) {
 		xoops_cp_header();
 		OpenTable();
 		echo "<h4 style='text-align:left;'>"._ALBM_PHOTODEL." $delete</h4>\n";
@@ -121,32 +121,32 @@ if(isset($HTTP_POST_VARS['submit']) && $HTTP_POST_VARS['submit'] != ""){
 	}
 
 // Check if Title exist
-    if ($HTTP_POST_VARS["title"]=="") {
+    if ($_POST["title"]=="") {
     	$eh->show("1001");
     }
 // Check if Photo exist
-//	$file = $HTTP_POST_VARS["uploadFileName"][0];
+//	$file = $_POST["uploadFileName"][0];
 //   	if ($file=="" || !isset($file)) {
 //        	$eh->show("7000");
 //    	}	
 // Check if Description exist
-    if ($HTTP_POST_VARS['description']=="") {
+    if ($_POST['description']=="") {
        	$eh->show("1008");
     }
-	if ( !empty($HTTP_POST_VARS['cid']) ) {
-    	$cid = $HTTP_POST_VARS['cid'];
+	if ( !empty($_POST['cid']) ) {
+    	$cid = $_POST['cid'];
 	} else {
 		$cid = 0;
 	}
-	if(isset($HTTP_POST_VARS['valid'])) {
+	if(isset($_POST['valid'])) {
 		$valid = 1;
 	} else {
 		$valid = 0;
 	}
 	
 	$field = $GLOBALS['uploadFileName'][0];
-//	echo "<h1>".$GLOBALS['uploadFileName'][0]."<br />".$HTTP_POST_FILES[$field]['tmp_name']."<br />".$HTTP_POST_FILES[$field]['name']."</h1>";
-	if ( $HTTP_POST_FILES[$field]['tmp_name'] != "none" ) {
+//	echo "<h1>".$GLOBALS['uploadFileName'][0]."<br />".$_FILES[$field]['tmp_name']."<br />".$_FILES[$field]['name']."</h1>";
+	if ( $_FILES[$field]['tmp_name'] != "none" ) {
 		$upload = new Upload();
 		$upload->setAllowedMimeTypes(array("image/gif","image/pjpeg","image/jpeg","image/x-png"));
 		$upload->setMaxImageSize($myalbum_width, $myalbum_heigth);
@@ -155,9 +155,9 @@ if(isset($HTTP_POST_VARS['submit']) && $HTTP_POST_VARS['submit'] != ""){
 		$upload->setDestinationFileName("$tmp_name");
 		$upload->setUploadPath(XOOPS_ROOT_PATH."/modules/myalbum/photos");
 		if ( $upload->doUpload() ) {
-			$title = $myts->makeTboxData4Save($HTTP_POST_VARS["title"]);
-   			$description = $myts->makeTareaData4Save($HTTP_POST_VARS["description"]);
-			$ext = preg_replace("/^.+\.([^.]+)$/sU", "\\1", $HTTP_POST_FILES[$field]['name']);
+			$title = $myts->makeTboxData4Save($_POST["title"]);
+   			$description = $myts->makeTareaData4Save($_POST["description"]);
+			$ext = preg_replace("/^.+\.([^.]+)$/sU", "\\1", $_FILES[$field]['name']);
 			$dim = GetImageSize(XOOPS_ROOT_PATH."/modules/myalbum/photos/$tmp_name.$ext");
 			if(is_numeric($lid)) { // last security check
 				unlink(XOOPS_ROOT_PATH."/modules/myalbum/photos/$lid.$ext");
@@ -186,9 +186,9 @@ if(isset($HTTP_POST_VARS['submit']) && $HTTP_POST_VARS['submit'] != ""){
        		exit();
 		}
 	} else {  //update without file upload
-		$title = $myts->makeTboxData4Save($HTTP_POST_VARS["title"]);
-		$description = $myts->makeTareaData4Save($HTTP_POST_VARS["description"]);
-    	$cid = $HTTP_POST_VARS['cid'];
+		$title = $myts->makeTboxData4Save($_POST["title"]);
+		$description = $myts->makeTareaData4Save($_POST["description"]);
+    	$cid = $_POST['cid'];
 		update($lid, $cid, $title, $description, $valid);
 	}
 

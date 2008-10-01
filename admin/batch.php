@@ -41,22 +41,22 @@ include(XOOPS_ROOT_PATH."/modules/myalbum/class/upload.class.php");
 $eh = new ErrorHandler; //ErrorHandler object
 $mytree = new XoopsTree($xoopsDB->prefix("myalbum_cat"),"cid","pid");
 
-if(isset($HTTP_POST_VARS['submit']) && $HTTP_POST_VARS['submit'] != "") {
+if(isset($_POST['submit']) && $_POST['submit'] != "") {
 	if(!$xoopsUser) {
 		redirect_header(XOOPS_URL."/user.php",2,_ALBM_MUSTREGFIRST);
 		exit();
 	} 
-	if(!isset($HTTP_POST_VARS['submitter']) || $HTTP_POST_VARS['submitter']=="") {
+	if(!isset($_POST['submitter']) || $_POST['submitter']=="") {
     	$submitter = $xoopsUser->uid();
     } else {
-		$submitter = $HTTP_POST_VARS['submitter'];
+		$submitter = $_POST['submitter'];
 	}
 	// Check if Description exist
-    if ($HTTP_POST_VARS['description']=="") {
+    if ($_POST['description']=="") {
     	$eh->show("1008");
 	}
-	if ( !empty($HTTP_POST_VARS['cid']) ) {
-    		$cid = $HTTP_POST_VARS['cid'];
+	if ( !empty($_POST['cid']) ) {
+    		$cid = $_POST['cid'];
 	} else {
 		$cid = 0;
 	}
@@ -64,9 +64,9 @@ if(isset($HTTP_POST_VARS['submit']) && $HTTP_POST_VARS['submit'] != "") {
 	$newid = $xoopsDB->genId($xoopsDB->prefix("myalbum_photos")."_lid_seq");
 
 	$url = $myts->makeTboxData4Save($url);
-	$title = $myts->makeTboxData4Save($HTTP_POST_VARS["title"]);
-   	$description = $myts->makeTareaData4Save($HTTP_POST_VARS["description"]);
-   	$dir = $myts->makeTboxData4Save($HTTP_POST_VARS["dir"]);
+	$title = $myts->makeTboxData4Save($_POST["title"]);
+   	$description = $myts->makeTareaData4Save($_POST["description"]);
+   	$dir = $myts->makeTboxData4Save($_POST["dir"]);
 
    	chdir($dir);
    	$dir_name = "$dir";
@@ -77,10 +77,10 @@ if(isset($HTTP_POST_VARS['submit']) && $HTTP_POST_VARS['submit'] != "") {
    		if (($file_name != "." && $file_name != "..")) {
    			$ext = preg_replace("/^.+\.([^.]+)$/sU", "\\1", $file_name);
    			$name = str_replace(".$ext", "", $file_name);
-   			if ($HTTP_POST_VARS["title"]=="") {
+   			if ($_POST["title"]=="") {
    				$nameDB = $name;
    			} else {
-   				$nameDB = $HTTP_POST_VARS["title"]." ".$filecount;
+   				$nameDB = $_POST["title"]." ".$filecount;
    				$filecount++;
    			}	
    			if(is_file($file_name) and in_array(strtolower($ext),array("jpg","png","gif"))) {

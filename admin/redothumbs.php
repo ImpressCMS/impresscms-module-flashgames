@@ -39,20 +39,20 @@ include_once(XOOPS_ROOT_PATH."/class/module.errorhandler.php");
 global $xoopsDB;
 xoops_cp_header();
 
-if(isset($HTTP_POST_VARS['submit']) && $HTTP_POST_VARS['submit'] != "") {
+if(isset($_POST['submit']) && $_POST['submit'] != "") {
     OpenTable();
 	if(!$xoopsUser) {
 		redirect_header(XOOPS_URL."/user.php",2,_ALBM_MUSTREGFIRST);
 		exit();
 	} 
 
-	if(!isset($HTTP_POST_VARS['submitter']) || $HTTP_POST_VARS['submitter']=="") {
+	if(!isset($_POST['submitter']) || $_POST['submitter']=="") {
     	$submitter = $xoopsUser->uid();
     } else {
-		$submitter = $HTTP_POST_VARS['submitter'];
+		$submitter = $_POST['submitter'];
 	}
 	// Check if size exist
-    if ($HTTP_POST_VARS['size']=="") {
+    if ($_POST['size']=="") {
         redirect_header(XOOPS_URL."/modules/myalbum/admin/redothumbs.php",2,_ALBM_MUSTREGFIRST);
 	}
     
@@ -74,10 +74,10 @@ $form->setExtra("enctype='multipart/form-data'");
 $question_text = new XoopsFormText(_ALBM_REDOTHUMBSNUMBER, "size", 50, 255, 10);
 
 $op_hidden = new XoopsFormHidden("op", "submit");
-if ($HTTP_POST_VARS['i']=="") {
+if ($_POST['i']=="") {
     $op_hidden = new XoopsFormHidden("i", "0");
 } else {
-    $op_hidden = new XoopsFormHidden("i", $HTTP_POST_VARS['i'] + $HTTP_POST_VARS['size']);
+    $op_hidden = new XoopsFormHidden("i", $_POST['i'] + $_POST['size']);
 }
 
 $submit_button = new XoopsFormButton("", "submit", _ALBM_NEXT, "submit");

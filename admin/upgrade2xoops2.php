@@ -39,7 +39,7 @@ include_once(XOOPS_ROOT_PATH."/class/module.errorhandler.php");
 global $xoopsDB;
 xoops_cp_header();
 
-if(isset($HTTP_POST_VARS['submit']) && $HTTP_POST_VARS['submit'] != "") {
+if(isset($_POST['submit']) && $_POST['submit'] != "") {
     OpenTable();
 	if(!$xoopsUser) {
 		redirect_header(XOOPS_URL."/user.php",2,_ALBM_MUSTREGFIRST);

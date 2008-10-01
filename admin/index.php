@@ -172,8 +172,8 @@ function linksConfigMenu(){
 }
 
 function modLink() {
-   	global $xoopsDB, $HTTP_GET_VARS, $myts, $eh, $mytree, $xoopsConfig;
-    	$lid = $HTTP_GET_VARS['lid'];
+   	global $xoopsDB, $_GET, $myts, $eh, $mytree, $xoopsConfig;
+    	$lid = $_GET['lid'];
 		xoops_cp_header();
     	OpenTable();
     	$result = $xoopsDB->query("select cid, title, url, email, logourl from ".$xoopsDB->prefix("flashgames_links")." where lid=$lid") or $eh->show("0013");
@@ -284,9 +284,9 @@ function modLink() {
 }
 
 function delVote() {
-    	global $xoopsDB, $HTTP_GET_VARS, $eh;
-    	$rid = $HTTP_GET_VARS['rid'];
-    	$lid = $HTTP_GET_VARS['lid'];
+    	global $xoopsDB, $_GET, $eh;
+    	$rid = $_GET['rid'];
+    	$lid = $_GET['lid'];
     	$query = "delete from ".$xoopsDB->prefix("flashgames_votedata")." where ratingid=$rid";
     	$xoopsDB->query($query) or $eh->show("0013");
     	updaterating($lid);
@@ -358,8 +358,8 @@ function listBrokenLinks() {
 	xoops_cp_footer();
 }
 function delBrokenLinks() {
-    	global $xoopsDB, $HTTP_GET_VARS, $eh;
-    	$lid = $HTTP_GET_VARS['lid'];
+    	global $xoopsDB, $_GET, $eh;
+    	$lid = $_GET['lid'];
     	$query = "delete from ".$xoopsDB->prefix("flashgames_broken")." where lid=$lid";
     	$xoopsDB->query($query) or $eh->show("0013");
     	$query = "delete from ".$xoopsDB->prefix("flashgames_links")." where lid=$lid";
@@ -368,8 +368,8 @@ function delBrokenLinks() {
 	exit();
 }
 function ignoreBrokenLinks() {
-    	global $xoopsDB, $HTTP_GET_VARS, $eh;
-    	$query = "delete from ".$xoopsDB->prefix("flashgames_broken")." where lid=".$HTTP_GET_VARS['lid']."";
+    	global $xoopsDB, $_GET, $eh;
+    	$query = "delete from ".$xoopsDB->prefix("flashgames_broken")." where lid=".$_GET['lid']."";
     	$xoopsDB->query($query) or $eh->show("0013");
     	redirect_header("index.php",1,_ALBM_BROKENDELETED);
 	exit();
@@ -477,8 +477,8 @@ function listModReq() {
 	xoops_cp_footer();
 }
 function changeModReq() {
-    	global $xoopsDB, $HTTP_GET_VARS, $eh, $myts;
-    	$requestid = $HTTP_GET_VARS['requestid'];
+    	global $xoopsDB, $_GET, $eh, $myts;
+    	$requestid = $_GET['requestid'];
     	$query = "select lid, cid, title, url, email, logourl, description from ".$xoopsDB->prefix("flashgames_mod")." where requestid=".$requestid."";
     	$result = $xoopsDB->query($query);
     	while(list($lid, $cid, $title, $url, $email, $logourl, $description)=$xoopsDB->fetchRow($result)) {
@@ -504,45 +504,45 @@ function changeModReq() {
 	exit();
 }
 function ignoreModReq() {
-    	global $xoopsDB, $HTTP_GET_VARS, $eh;
-    	$query= "delete from ".$xoopsDB->prefix("flashgames_mod")." where requestid=".$HTTP_GET_VARS['requestid']."";
+    	global $xoopsDB, $_GET, $eh;
+    	$query= "delete from ".$xoopsDB->prefix("flashgames_mod")." where requestid=".$_GET['requestid']."";
     	$xoopsDB->query($query) or $eh->show("0013");
     	redirect_header("index.php",1,_ALBM_MODREQDELETED);
 	exit();
 }
 
 function modLinkS() {
-    	global $xoopsDB, $HTTP_POST_VARS, $myts, $eh;
-    	$cid = $HTTP_POST_VARS["cid"];
-    	if (($HTTP_POST_VARS["url"]) || ($HTTP_POST_VARS["url"]!="")) {
-//		$url = $myts->formatURL($HTTP_POST_VARS["url"]);
+    	global $xoopsDB, $_POST, $myts, $eh;
+    	$cid = $_POST["cid"];
+    	if (($_POST["url"]) || ($_POST["url"]!="")) {
+//		$url = $myts->formatURL($_POST["url"]);
 //		$url = urlencode($url);
-		$url = $myts->makeTboxData4Save($HTTP_POST_VARS["url"]);
+		$url = $myts->makeTboxData4Save($_POST["url"]);
 	}
-	$logourl = $myts->makeTboxData4Save($HTTP_POST_VARS["logourl"]);
-    	$title = $myts->makeTboxData4Save($HTTP_POST_VARS["title"]);
-    	$email = $myts->makeTboxData4Save($HTTP_POST_VARS["email"]);
+	$logourl = $myts->makeTboxData4Save($_POST["logourl"]);
+    	$title = $myts->makeTboxData4Save($_POST["title"]);
+    	$email = $myts->makeTboxData4Save($_POST["email"]);
     	
-    	$description = $myts->makeTareaData4Save($HTTP_POST_VARS["description"]);
-    	$xoopsDB->query("update ".$xoopsDB->prefix("flashgames_links")." set cid='$cid', title='$title', url='$url', email='$email', logourl='$logourl', status=2, date=".time()." where lid=".$HTTP_POST_VARS['lid']."")  or $eh->show("0013");
-    	$xoopsDB->query("update ".$xoopsDB->prefix("flashgames_text")." set description='$description' where lid=".$HTTP_POST_VARS['lid']."")  or $eh->show("0013");
+    	$description = $myts->makeTareaData4Save($_POST["description"]);
+    	$xoopsDB->query("update ".$xoopsDB->prefix("flashgames_links")." set cid='$cid', title='$title', url='$url', email='$email', logourl='$logourl', status=2, date=".time()." where lid=".$_POST['lid']."")  or $eh->show("0013");
+    	$xoopsDB->query("update ".$xoopsDB->prefix("flashgames_text")." set description='$description' where lid=".$_POST['lid']."")  or $eh->show("0013");
     	redirect_header("index.php",1,_ALBM_DBUPDATED);
 	exit();
 }
 function delLink() {
-   	global $xoopsDB, $HTTP_GET_VARS, $eh;
-   	$query = "delete from ".$xoopsDB->prefix("flashgames_links")." where lid=".$HTTP_GET_VARS['lid']."";
+   	global $xoopsDB, $_GET, $eh;
+   	$query = "delete from ".$xoopsDB->prefix("flashgames_links")." where lid=".$_GET['lid']."";
    	$xoopsDB->query($query) or $eh->show("0013");
-	$query = "delete from ".$xoopsDB->prefix("flashgames_text")." where lid=".$HTTP_GET_VARS['lid']."";
+	$query = "delete from ".$xoopsDB->prefix("flashgames_text")." where lid=".$_GET['lid']."";
 	$xoopsDB->query($query) or $eh->show("0013");
-	$query = "delete from ".$xoopsDB->prefix("flashgames_votedata")." where lid=".$HTTP_GET_VARS['lid']."";
+	$query = "delete from ".$xoopsDB->prefix("flashgames_votedata")." where lid=".$_GET['lid']."";
 	$xoopsDB->query($query) or $eh->show("0013");
     	redirect_header("index.php",1,_ALBM_LINKDELETED);
 	exit();
 }
 function modCat() {
-    	global $xoopsDB, $HTTP_POST_VARS, $myts, $eh, $mytree;
-    	$cid = $HTTP_POST_VARS["cid"];
+    	global $xoopsDB, $_POST, $myts, $eh, $mytree;
+    	$cid = $_POST["cid"];
 	xoops_cp_header();
     	OpenTable();
     	echo "<h4>"._ALBM_MODCAT."</h4><br>";
@@ -564,21 +564,21 @@ function modCat() {
 	xoops_cp_footer();
 }
 function modCatS() {
-    	global $xoopsDB, $HTTP_POST_VARS, $myts, $eh;
-    	$cid =  $HTTP_POST_VARS['cid'];
-    	$pid =  $HTTP_POST_VARS['pid'];
-    	$title =  $myts->makeTboxData4Save($HTTP_POST_VARS['title']);
-	if (($HTTP_POST_VARS["imgurl"]) || ($HTTP_POST_VARS["imgurl"]!="")) {
-		$imgurl = $myts->makeTboxData4Save($HTTP_POST_VARS["imgurl"]);
+    	global $xoopsDB, $_POST, $myts, $eh;
+    	$cid =  $_POST['cid'];
+    	$pid =  $_POST['pid'];
+    	$title =  $myts->makeTboxData4Save($_POST['title']);
+	if (($_POST["imgurl"]) || ($_POST["imgurl"]!="")) {
+		$imgurl = $myts->makeTboxData4Save($_POST["imgurl"]);
 	}
 	$xoopsDB->query("update ".$xoopsDB->prefix("flashgames_cat")." set pid=$pid, title='$title', imgurl='$imgurl' where cid=$cid") or $eh->show("0013");
     	redirect_header("index.php",1,_ALBM_DBUPDATED);
 }
 function delCat() {
-    	global $xoopsDB, $HTTP_GET_VARS, $eh, $mytree;
-    	$cid =  $HTTP_GET_VARS['cid'];
-    	if($HTTP_GET_VARS['ok']){
-    		$ok =  $HTTP_GET_VARS['ok'];
+    	global $xoopsDB, $_GET, $eh, $mytree;
+    	$cid =  $_GET['cid'];
+    	if($_GET['ok']){
+    		$ok =  $_GET['ok'];
     	}
     	if($ok==1) {
 		//get all subcategories under the specified category
@@ -651,21 +651,21 @@ function delCat() {
     	}
 }
 function delNewLink() {
-    	global $xoopsDB, $HTTP_GET_VARS, $eh;
-    	$query = "delete from ".$xoopsDB->prefix("flashgames_links")." where lid=".$HTTP_GET_VARS['lid']."";
+    	global $xoopsDB, $_GET, $eh;
+    	$query = "delete from ".$xoopsDB->prefix("flashgames_links")." where lid=".$_GET['lid']."";
     	$xoopsDB->query($query) or $eh->show("0013");
-    	$query = "delete from ".$xoopsDB->prefix("flashgames_text")." where lid=".$HTTP_GET_VARS['lid']."";
+    	$query = "delete from ".$xoopsDB->prefix("flashgames_text")." where lid=".$_GET['lid']."";
     	$xoopsDB->query($query) or $eh->show("0013");
 	redirect_header("index.php",1,_ALBM_LINKDELETED);
 }
 function addCat() {
-    	global $xoopsDB, $HTTP_POST_VARS, $myts, $eh;
-    	$pid = $HTTP_POST_VARS["cid"];
-    	$title = $HTTP_POST_VARS["title"];
-    	if (($HTTP_POST_VARS["imgurl"]) || ($HTTP_POST_VARS["imgurl"]!="")) {
-//		$imgurl = $myts->formatURL($HTTP_POST_VARS["imgurl"]);
+    	global $xoopsDB, $_POST, $myts, $eh;
+    	$pid = $_POST["cid"];
+    	$title = $_POST["title"];
+    	if (($_POST["imgurl"]) || ($_POST["imgurl"]!="")) {
+//		$imgurl = $myts->formatURL($_POST["imgurl"]);
 //		$imgurl = urlencode($imgurl);
-		$imgurl = $myts->makeTboxData4Save($HTTP_POST_VARS["imgurl"]);
+		$imgurl = $myts->makeTboxData4Save($_POST["imgurl"]);
 	}
     	$title = $myts->makeTboxData4Save($title);
 	$newid = $xoopsDB->genId($xoopsDB->prefix("flashgames_cat")."_cid_seq");
@@ -674,16 +674,16 @@ function addCat() {
 }
 
 function addLink() {
-    	global $xoopsConfig, $xoopsDB, $myts, $xoopsUser, $eh, $HTTP_POST_VARS;
-	if (($HTTP_POST_VARS["url"]) || ($HTTP_POST_VARS["url"]!="")) {
-	//	$url=$myts->formatURL($HTTP_POST_VARS["url"]);
+    	global $xoopsConfig, $xoopsDB, $myts, $xoopsUser, $eh, $_POST;
+	if (($_POST["url"]) || ($_POST["url"]!="")) {
+	//	$url=$myts->formatURL($_POST["url"]);
 //		$url = urlencode($url);
-		$url = $myts->makeTboxData4Save($HTTP_POST_VARS["url"]);
+		$url = $myts->makeTboxData4Save($_POST["url"]);
 	}
-	$logourl = $myts->makeTboxData4Save($HTTP_POST_VARS["logourl"]);
-    	$title = $myts->makeTboxData4Save($HTTP_POST_VARS["title"]);
-    	$email = $myts->makeTboxData4Save($HTTP_POST_VARS["email"]);
-    	$description = $myts->makeTareaData4Save($HTTP_POST_VARS["description"]);
+	$logourl = $myts->makeTboxData4Save($_POST["logourl"]);
+    	$title = $myts->makeTboxData4Save($_POST["title"]);
+    	$email = $myts->makeTboxData4Save($_POST["email"]);
+    	$description = $myts->makeTareaData4Save($_POST["description"]);
     	$submitter = $xoopsUser->uid();
     	$result = $xoopsDB->query("select count(*) from ".$xoopsDB->prefix("flashgames_links")." where url='$url'");
     	list($numrows) = $xoopsDB->fetchRow($result);
@@ -713,8 +713,8 @@ function addLink() {
 		xoops_cp_footer();
 		exit();
     	}
-    	if ( !empty($HTTP_POST_VARS['cid']) ) {
-        	$cid = $HTTP_POST_VARS['cid'];
+    	if ( !empty($_POST['cid']) ) {
+        	$cid = $_POST['cid'];
 	} else {
 		$cid = 0;
 	}
@@ -727,21 +727,21 @@ function addLink() {
     	redirect_header("index.php",1,_ALBM_NEWLINKADDED);
 }
 function approve(){
-	global $xoopsConfig, $xoopsDB, $HTTP_POST_VARS, $myts, $eh;
-	$lid = $HTTP_POST_VARS['lid'];
-	$title = $HTTP_POST_VARS['title'];
-	$cid = $HTTP_POST_VARS['cid'];
+	global $xoopsConfig, $xoopsDB, $_POST, $myts, $eh;
+	$lid = $_POST['lid'];
+	$title = $_POST['title'];
+	$cid = $_POST['cid'];
 	if ( empty($cid) ) {
 		$cid = 0;
 	}
-	$email = $HTTP_POST_VARS['email'];
-	$description = $HTTP_POST_VARS['description'];
-	if (($HTTP_POST_VARS["url"]) || ($HTTP_POST_VARS["url"]!="")) {
-//		$url=$myts->formatURL($HTTP_POST_VARS["url"]);
+	$email = $_POST['email'];
+	$description = $_POST['description'];
+	if (($_POST["url"]) || ($_POST["url"]!="")) {
+//		$url=$myts->formatURL($_POST["url"]);
 //		$url = urlencode($url);
-		$url = $myts->makeTboxData4Save($HTTP_POST_VARS["url"]);
+		$url = $myts->makeTboxData4Save($_POST["url"]);
 	}
-	$logourl = $myts->makeTboxData4Save($HTTP_POST_VARS["logourl"]);
+	$logourl = $myts->makeTboxData4Save($_POST["logourl"]);
 	$title = $myts->makeTboxData4Save($title);
 	$email = $myts->makeTboxData4Save($email);
 	$description = $myts->makeTareaData4Save($description);
@@ -926,22 +926,22 @@ echo "<tr><td nowrap>" . _ALBM_USERSUBMIT . "</td><td>";
 }
 
 function flashgamesConfigChange() {
-	global $xoopsConfig, $HTTP_POST_VARS;
+	global $xoopsConfig, $_POST;
 
-	$xflashgames_popular = $HTTP_POST_VARS['xflashgames_popular'];
-	$xflashgames_newlinks = $HTTP_POST_VARS['xflashgames_newlinks'];
-	$xflashgames_perpage = $HTTP_POST_VARS['xflashgames_perpage'];
-	$xflashgames_useshots = $HTTP_POST_VARS['xflashgames_useshots'];
-	$xflashgames_shotwidth = $HTTP_POST_VARS['xflashgames_shotwidth'];
-	$xflashgames_width = $HTTP_POST_VARS['xflashgames_width'];
-	$xflashgames_heigth = $HTTP_POST_VARS['xflashgames_heigth'];
-	$xflashgames_fsize = $HTTP_POST_VARS['xflashgames_fsize'];		
-	$xflashgames_managed = $HTTP_POST_VARS['xflashgames_managed'];		
+	$xflashgames_popular = $_POST['xflashgames_popular'];
+	$xflashgames_newlinks = $_POST['xflashgames_newlinks'];
+	$xflashgames_perpage = $_POST['xflashgames_perpage'];
+	$xflashgames_useshots = $_POST['xflashgames_useshots'];
+	$xflashgames_shotwidth = $_POST['xflashgames_shotwidth'];
+	$xflashgames_width = $_POST['xflashgames_width'];
+	$xflashgames_heigth = $_POST['xflashgames_heigth'];
+	$xflashgames_fsize = $_POST['xflashgames_fsize'];		
+	$xflashgames_managed = $_POST['xflashgames_managed'];		
 // OKa begin
-        $xflashgames_scoresave = $HTTP_POST_VARS['xflashgames_scoresave'];		
-	$xflashgames_scoreshow = $HTTP_POST_VARS['xflashgames_scoreshow'];
-        $xflashgames_playershow = $HTTP_POST_VARS['xflashgames_playershow'];        
-        $xflashgames_usersubmit = $HTTP_POST_VARS['xflashgames_usersubmit'];
+        $xflashgames_scoresave = $_POST['xflashgames_scoresave'];		
+	$xflashgames_scoreshow = $_POST['xflashgames_scoreshow'];
+        $xflashgames_playershow = $_POST['xflashgames_playershow'];        
+        $xflashgames_usersubmit = $_POST['xflashgames_usersubmit'];
 
 
 $xflashgames_width = 1102400;

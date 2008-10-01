@@ -31,7 +31,7 @@
 include("header.php");
 include_once(XOOPS_ROOT_PATH."/class/module.errorhandler.php");
 $myts =& MyTextSanitizer::getInstance(); // MyTextSanitizer object
-if($HTTP_POST_VARS['submit']) {
+if($_POST['submit']) {
 	$eh = new ErrorHandler; //ErrorHandler object
 	if(!$xoopsUser){
 		$ratinguser = 0;
@@ -41,14 +41,14 @@ if($HTTP_POST_VARS['submit']) {
     	//Make sure only 1 anonymous from an IP in a single day.
     	$anonwaitdays = 1;
     	$ip = getenv("REMOTE_ADDR");
-	$lid = $HTTP_POST_VARS['lid'];
-	$rating = $HTTP_POST_VARS['rating'];
+	$lid = $_POST['lid'];
+	$rating = $_POST['rating'];
     	// Check if Rating is Null
     	if ($rating=="--") {
 		redirect_header("rategame.php?lid=".$lid."",4,_ALBM_NORATING);
 		exit();
     	}
-	$lid = $HTTP_POST_VARS['lid'];
+	$lid = $_POST['lid'];
     	// Check if Link POSTER is voting (UNLESS Anonymous users allowed to post)
     	if ($ratinguser != 0) {
         	$result=$xoopsDB->query("select submitter from ".$xoopsDB->prefix("flashgames_games")." where lid=$lid");

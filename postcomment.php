@@ -4,8 +4,8 @@
 include("header.php");
 include_once(XOOPS_ROOT_PATH."/class/xoopscomments.php");
 
-if ( isset($HTTP_POST_VARS['op']) ){
-	switch($HTTP_POST_VARS['op']){
+if ( isset($_POST['op']) ){
+	switch($_POST['op']){
 	    case "preview":
 		include(XOOPS_ROOT_PATH."/header.php");
 		$myts =& MyTextSanitizer::getInstance();

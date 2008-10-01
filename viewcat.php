@@ -34,8 +34,8 @@ include_once(XOOPS_ROOT_PATH."/class/xoopstree.php");
 
 $mytree = new XoopsTree($xoopsDB->prefix("flashgames_cat"),"cid","pid");
 
-$cid = $HTTP_GET_VARS['cid'];
-$lid = $HTTP_GET_VARS['uid'];
+$cid = $_GET['cid'];
+$lid = $_GET['uid'];
 $xoopsOption['template_main'] = 'flashgames_viewcat.html';
 include(XOOPS_ROOT_PATH."/header.php");
 //OpenTable();   // Oka
@@ -43,21 +43,21 @@ include(XOOPS_ROOT_PATH."/header.php");
 //echo "<table width='100%' border='0' cellspacing='1' cellpadding='8' style='border: 0px solid #2F5376;'><tr class='bg4'><td valign='top'>\n";
 
 //mainheader();
-if ($HTTP_GET_VARS['show']!="") {
-	$show = $HTTP_GET_VARS['show'];
+if ($_GET['show']!="") {
+	$show = $_GET['show'];
 } else {
 	$show = $flashgames_perpage;
 }
-if (!isset($HTTP_GET_VARS['min'])) {
+if (!isset($_GET['min'])) {
 	$min = 0;
 } else {
-	$min = $HTTP_GET_VARS['min'];
+	$min = $_GET['min'];
 }
 if (!isset($max)) {
 	$max = $min + $show;
 }
-if(isset($HTTP_GET_VARS['orderby'])) {
-	$orderby = convertorderbyin($HTTP_GET_VARS['orderby']);
+if(isset($_GET['orderby'])) {
+	$orderby = convertorderbyin($_GET['orderby']);
 } else {
 	$orderby = "title ASC";
 }
@@ -227,7 +227,7 @@ $title = $ltitle;
     $linkpages = ceil($numrows / $show);
     //Page Numbering
     if ($linkpages!=1 && $linkpages!=0) {
-		$cid = intval($HTTP_GET_VARS['cid']);
+		$cid = intval($_GET['cid']);
         $prev = $min - $show;
         if ($prev>=0) {
             $page_nav .= "<a href='viewcat.php?cid=$cid&amp;min=$prev&amp;orderby=$orderby&amp;show=$show'><b><u>&laquo;</u></b></a>&nbsp;";

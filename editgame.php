@@ -131,19 +131,19 @@ if(isset($delete) and $delete != "") {
 	exit();
 }
 
-if(isset($HTTP_POST_VARS['submit']) && $HTTP_POST_VARS['submit'] != ""){
+if(isset($_POST['submit']) && $_POST['submit'] != ""){
 	if(!$xoopsUser){
 		redirect_header(XOOPS_URL."/user.php",2,_ALBM_MUSTREGFIRST);
 		exit();
 	} 
 
-   	if(!isset($HTTP_POST_VARS['submitter']) || $HTTP_POST_VARS['submitter']=="") {
+   	if(!isset($_POST['submitter']) || $_POST['submitter']=="") {
    		$submitter = $xoopsUser->uid();
  	} else {
-		$submitter = $HTTP_POST_VARS['submitter'];
+		$submitter = $_POST['submitter'];
 	}
 
-	if(isset($HTTP_POST_VARS['delete'])) {
+	if(isset($_POST['delete'])) {
         include(XOOPS_ROOT_PATH."/include/cp_functions.php");
         include_once("../../header.php");
 		OpenTable();
@@ -160,30 +160,30 @@ if(isset($HTTP_POST_VARS['submit']) && $HTTP_POST_VARS['submit'] != ""){
 	}
 
 // Check if Title exist
-    if ($HTTP_POST_VARS["title"]=="") {
+    if ($_POST["title"]=="") {
     	$eh->show("1001");
     }
 // Check if Photo exist
-//	$file = $HTTP_POST_VARS["uploadFileName"][0];
+//	$file = $_POST["uploadFileName"][0];
 //   	if ($file=="" || !isset($file)) {
 //        	$eh->show("7000");
 //    	}	
 // Check if Description exist
-    if ($HTTP_POST_VARS['description']=="") {
+    if ($_POST['description']=="") {
        	$eh->show("1008");
     }
-	if ( !empty($HTTP_POST_VARS['cid']) ) {
-    	$cid = $HTTP_POST_VARS['cid'];
+	if ( !empty($_POST['cid']) ) {
+    	$cid = $_POST['cid'];
 	} else {
 		$cid = 0;
 	}
-	if(isset($HTTP_POST_VARS['valid'])) {
+	if(isset($_POST['valid'])) {
 		$valid = 1;
 	} else {
 		$valid = 0;
 	}
 
-if(isset($HTTP_POST_VARS['membersonly'])) {
+if(isset($_POST['membersonly'])) {
 		$membersonly = 1;
 	} else {
 		$membersonly = 0;
@@ -191,8 +191,8 @@ if(isset($HTTP_POST_VARS['membersonly'])) {
 
 
 	$field = $GLOBALS['uploadFileName'][0];
-//	echo "<h1>".$GLOBALS['uploadFileName'][0]."<br />".$HTTP_POST_FILES[$field]['tmp_name']."<br />".$HTTP_POST_FILES[$field]['name']."</h1>";
-	if ( $HTTP_POST_FILES[$field]['tmp_name'] != "" ) {
+//	echo "<h1>".$GLOBALS['uploadFileName'][0]."<br />".$_FILES[$field]['tmp_name']."<br />".$_FILES[$field]['name']."</h1>";
+	if ( $_FILES[$field]['tmp_name'] != "" ) {
     
 		$upload = new Upload();
 $upload->setAllowedMimeTypes(array("image/gif","image/pjpeg","image/jpeg","image/x-png","application/x-shockwave-flash",
@@ -203,9 +203,9 @@ $upload->setAllowedMimeTypes(array("image/gif","image/pjpeg","image/jpeg","image
 		$upload->setDestinationFileName("$tmp_name");
 		$upload->setUploadPath(XOOPS_ROOT_PATH."/modules/flashgames/games");
 		if ( $upload->doUpload() ) {
-			$title = $myts->makeTboxData4Save($HTTP_POST_VARS["title"]);
-   			$description = $myts->makeTareaData4Save($HTTP_POST_VARS["description"]);
-			$ext = preg_replace("/^.+\.([^.]+)$/sU", "\\1", $HTTP_POST_FILES[$field]['name']);
+			$title = $myts->makeTboxData4Save($_POST["title"]);
+   			$description = $myts->makeTareaData4Save($_POST["description"]);
+			$ext = preg_replace("/^.+\.([^.]+)$/sU", "\\1", $_FILES[$field]['name']);
 			$dim = GetImageSize(XOOPS_ROOT_PATH."/modules/flashgames/games/$tmp_name.$ext");
 			if(is_numeric($lid)) { // last security check
 //				unlink(XOOPS_ROOT_PATH."/modules/flashgames/games/$lid.$ext");
@@ -237,14 +237,14 @@ $upload->setAllowedMimeTypes(array("image/gif","image/pjpeg","image/jpeg","image
        		exit();
 		}
 	} else {  //update without file upload
-		$title = $myts->makeTboxData4Save($HTTP_POST_VARS["title"]);
-		$description = $myts->makeTareaData4Save($HTTP_POST_VARS["description"]);
-		$license = $HTTP_POST_VARS["license"];
-        $classfile = $HTTP_POST_VARS["classfile"];
-    	$cid = $HTTP_POST_VARS['cid'];
-    	$res_x = $HTTP_POST_VARS['res_x'];
-    	$res_y = $HTTP_POST_VARS['res_y'];
-    	$bgcolor = $HTTP_POST_VARS['bgcolor'];
+		$title = $myts->makeTboxData4Save($_POST["title"]);
+		$description = $myts->makeTareaData4Save($_POST["description"]);
+		$license = $_POST["license"];
+        $classfile = $_POST["classfile"];
+    	$cid = $_POST['cid'];
+    	$res_x = $_POST['res_x'];
+    	$res_y = $_POST['res_y'];
+    	$bgcolor = $_POST['bgcolor'];
         if (!$xoopsUser->isAdmin($xoopsModule->mid()) ) {
             $valid = 1;
         }
