@@ -5,7 +5,7 @@ extract($_GET);
 
 include '../../../mainfile.php';
 require_once XOOPS_ROOT_PATH.'/kernel/module.php';
-include XOOPS_ROOT_PATH.'/include/cp_functions.php');
+include XOOPS_ROOT_PATH.'/include/cp_functions.php';
 
 global $xoopsDB, $lid;
 $lid = intval($lid);
