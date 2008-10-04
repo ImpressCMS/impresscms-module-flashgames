@@ -28,29 +28,30 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA //
 // ------------------------------------------------------------------------- //
 
+include 'header.php';
+$myts =& MyTextSanitizer::getInstance();
+include_once XOOPS_ROOT_PATH.'/class/xoopstree.php';
+$mytree = new XoopsTree($xoopsDB->prefix('flashgames_cat'),'cid','pid');
 
-include("header.php");
-$myts =& MyTextSanitizer::getInstance(); // MyTextSanitizer object
-include_once(XOOPS_ROOT_PATH."/class/xoopstree.php");
-$mytree = new XoopsTree($xoopsDB->prefix("flashgames_cat"),"cid","pid");
-
-include(XOOPS_ROOT_PATH."/header.php");
+include XOOPS_ROOT_PATH.'/header.php';
 //generates top 10 charts by rating and hits for each main category
-// OpenTable();
 echo "<table width='100%' border='0' cellspacing='1' cellpadding='8' style='border: 0px solid #2F5376;'><tr class='bg4'><td valign='top'>\n";
 
-
 mainheader();
-if(isset($rate)){
+if(isset($rate))
+{
 	$sort = _ALBM_RATING;
-	$sortDB = "rating";
-}else{
+	$sortDB = 'rating';
+}
+else
+{
 	$sort = _ALBM_HITS;
-	$sortDB = "hits";
+	$sortDB = 'hits';
 }
 $arr=array();
-$result=$xoopsDB->query("select cid, title from ".$xoopsDB->prefix("flashgames_cat")." where pid=0");
-while(list($cid,$ctitle)=$xoopsDB->fetchRow($result)){
+$result=$xoopsDB->query('select cid, title from '.$xoopsDB->prefix('flashgames_cat').' where pid=0');
+while(list($cid,$ctitle)=$xoopsDB->fetchRow($result))
+{
 	$boxtitle = "<big>";
 	$boxtitle .= sprintf(_ALBM_TOP10,$ctitle);
 	$boxtitle .= " (".$sort.")</big>";
@@ -59,23 +60,19 @@ while(list($cid,$ctitle)=$xoopsDB->fetchRow($result)){
 	// get all child cat ids for a given cat id
 	$arr=$mytree->getAllChildId($cid);
 	$size = sizeof($arr);
-	for($i=0;$i<$size;$i++){
-		$query .= " or cid=".$arr[$i]."";
-	}
+	for($i=0;$i<$size;$i++) {$query .= " or cid=".$arr[$i]."";}
 	$query .= ") order by ".$sortDB." DESC"; 
 	$result2 = $xoopsDB->query($query,10,0);
 	$rank = 1;
-	while(list($lid,$lcid,$ltitle,$hits,$rating,$votes)=$xoopsDB->fetchRow($result2)){
+	while(list($lid,$lcid,$ltitle,$hits,$rating,$votes)=$xoopsDB->fetchRow($result2))
+	{
 		$rating = number_format($rating, 2);
-		if($hit){
-			$hits = "<span class='fg2'>$hits</span>";
-		} elseif($rate) {
-			$rating = "<span class='fg2'>$rating</span>";
-		}else{
-		}
-		$catpath = $mytree->getPathFromId($lcid, "title");
+		if($hit) {$hits = "<span class='fg2'>$hits</span>";}
+		elseif($rate) {$rating = "<span class='fg2'>$rating</span>";}
+		else{}
+		$catpath = $mytree->getPathFromId($lcid, 'title');
 		$catpath= substr($catpath, 1);
-		$catpath = str_replace("/"," <span class='fg2'>&raquo;&raquo;</span> ",$catpath);
+		$catpath = str_replace('/'," <span class='fg2'>&raquo;&raquo;</span> ",$catpath);
 		$thing .= "<tr><td>$rank</td>";
 		$thing .= "<td><a href='game.php?lid=$lid'>$ltitle</a></td>";
 		$thing .= "<td>$catpath</td>";
@@ -83,12 +80,11 @@ while(list($cid,$ctitle)=$xoopsDB->fetchRow($result)){
 		$thing .= "<td align='center'>$rating</td><td align='right'>$votes</td></tr>";
 		$rank++;
 	}
-	$thing .= "</table>";
+	$thing .= '</table>';
 	themecenterposts($boxtitle,$thing);
-	echo "<br />";
+	echo '<br />';
 }
 CloseTable();
 
-include("footer.php");
-
+include 'footer.php';
 ?>
