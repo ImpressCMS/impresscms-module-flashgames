@@ -289,9 +289,18 @@ function get_DateTime ($string) {
 
 
 function GetFooter(){
-	return "<br /><div align='center'><a href='http://www.tipsmitgrips.de'><b>Flashgames 1.0.1</b></a>" .
-		   "<div align='center'><a href='http://www.pnflashgames.com/linkback.php?type=xoops' target='_blank'>Powered by www.pnFlashGames.com</a></div>" . 
-		   "<div align='center'><a href='http://www.pnflashgames.com/linkback.php?type=xoops' target='_blank'><img src='".XOOPS_URL."/modules/flashgames/images/poweredByButton.gif' border='0'></a></div>";
+	return "
+    <br />
+    <div align='center'>
+      <a href='http://www.tipsmitgrips.de'><b>Flashgames 1.0.1</b></a>
+    </div><!-- fixed missing div -->
+    <div align='center'>
+      <a href='http://www.pnflashgames.com/linkback.php?type=xoops' target='_blank'>Powered by www.pnFlashGames.com</a>
+    </div>
+  	<div align='center'>
+      <a href='http://www.pnflashgames.com/linkback.php?type=xoops' target='_blank'><img src='".XOOPS_URL."/modules/flashgames/images/poweredByButton.gif' border='0'></a>
+    </div>
+  ";
 
 }
 
