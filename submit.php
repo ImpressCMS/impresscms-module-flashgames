@@ -118,7 +118,7 @@ if(isset($_POST['submit']) && $_POST['submit'] !='')
 
 			echo '</p>';
 			CloseTable();
-			include XOOPS_ROOT_PATH.'/footer.php');
+			include XOOPS_ROOT_PATH.'/footer.php';
 			exit();
 		}
 	}
