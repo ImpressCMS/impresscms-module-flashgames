@@ -262,7 +262,11 @@ if ( $members == 1 ){
 	$xoopsTpl->append('games', array('id' => $lid, 'cid' => $cid, 'rating' => number_format($rating, 2), 'title' => $title, 'ext' => $new.$pop, 'category' => $path,  'updated' => formatTimestamp($time,"s"), 'description' => $myts->makeTareaData4Show($description), 'adminlink' => $adminlink, 'hits' => $hits, 'votes' => $votestring, 'comments' => $comments,  'members' => $members, 'image' => $img ));
 }
 
+
+
+
 $xoopsTpl->assign('dontchange_copyright', GetFooter() );
+
 
 include XOOPS_ROOT_PATH.'/footer.php';
 

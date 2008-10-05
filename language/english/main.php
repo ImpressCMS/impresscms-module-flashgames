@@ -188,7 +188,7 @@ define("_ALBM_CANCEL","Cancel");
 
 define("_ALBM_ALREADYREPORTED","You have already submitted a broken report for this resource.");
 define("_ALBM_MUSTREGFIRST","Sorry, you don't have the permission to perform this action.<br>Please register or login first!");
-define("_ALBM_MUSTADDCATFIRST","Sorry, you don't have categories to add to yet.<br>Please create a categorie first!");
+define("_ALBM_MUSTADDCATFIRST","Sorry, you don't have categories to add to yet.<br>Please create a category first!");
 define("_ALBM_NORATING","No rating selected.");
 define("_ALBM_CANTVOTEOWN","You cannot vote on the resource you submitted.<br>All votes are logged and reviewed.");
 define("_ALBM_VOTEONCE2","Vote for the selected resource only once.<br>All votes are logged and reviewed.");
