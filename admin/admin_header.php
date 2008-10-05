@@ -9,7 +9,7 @@ include XOOPS_ROOT_PATH.'/include/cp_functions.php';
 
 global $xoopsDB, $lid;
 $lid = intval($lid);
-$result = $xoopsDB->query("SELECT l.submitter FROM ".$xoopsDB->prefix('flashgames_games')." l, ".$xoopsDB->prefix('flashgames_text')." t where l.lid=$lid",0);
+$result = $xoopsDB->query("SELECT l.submitter FROM ".$xoopsDB->prefix('flashgames_games')." l, ".$xoopsDB->prefix('flashgames_text')." t WHERE l.lid=$lid",0);
 list($submitter) = $xoopsDB->fetchRow($result);
 
 if($xoopsUser)

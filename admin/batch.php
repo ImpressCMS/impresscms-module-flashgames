@@ -89,13 +89,13 @@ if(isset($_POST['submit']) && $_POST['submit'] != "") {
 				$newid = '\'\'';
 				$dim = GetImageSize("$dir/$name.$ext");
 				$q = "INSERT INTO ".$xoopsDB->prefix("myalbum_photos")." (lid, cid, title, ext, res_x, res_y, submitter, status, date, hits, rating, votes, comments) VALUES ($newid, $cid, '$nameDB', '$ext', '$dim[0]', '$dim[1]', $submitter, 1, $date, 0, 0, 0, 0)";
-    			$xoopsDB->query($q) or $eh->show("0013");
+   			$xoopsDB->queryF($q) or $eh->show("0013");
 				$newid = $xoopsDB->getInsertId();
 	   			print "&nbsp;&nbsp;<a href='photo.php?lid=$newid'>$name</a>\n";
 				copy("$dir/$name.$ext",
 					XOOPS_ROOT_PATH."/modules/myalbum/photos/$newid.$ext");
 				createThumb(XOOPS_ROOT_PATH."/modules/myalbum/photos/$newid.$ext", $newid, $ext);
-    			$xoopsDB->query("INSERT INTO ".$xoopsDB->prefix("myalbum_text")." (lid, description) VALUES ($newid, '$description')") or $eh->show("0013");
+    			$xoopsDB->queryF("INSERT INTO ".$xoopsDB->prefix("myalbum_text")." (lid, description) VALUES ($newid, '$description')") or $eh->show("0013");
     			print "Done!<br></center>\n";
 				CloseTable();
 	   		} 

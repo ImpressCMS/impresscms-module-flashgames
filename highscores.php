@@ -65,7 +65,7 @@ $xoopsTpl->assign('lang_noscore' ,_MD_NOSCORE);
 
 
 $arr=array();
-$result=$xoopsDB->query("select lid, title, gametype from ".$xoopsDB->prefix("flashgames_games")." where status=1 and (gametype >0)");
+$result=$xoopsDB->query("SELECT lid, title, gametype from ".$xoopsDB->prefix("flashgames_games")." WHERE status=1 and (gametype >0)");
 
 $e = 0;
 $count = 1;
@@ -98,7 +98,7 @@ $title = $myts->makeTboxData4Show(substr($title,0,(19 -1)))."...";
 
 $rankings[$e]['title'] = '<a href="'.XOOPS_URL.'/modules/flashgames/game.php?lid='.$lid.'" target="_self">'.$title.'</a>';
 
-	$query = "select lid, name, score, date from ".$xoopsDB->prefix("flashgames_score")." where  (lid=$lid";
+	$query = "SELECT lid, name, score, date from ".$xoopsDB->prefix("flashgames_score")." WHERE  (lid=$lid";
 	// get all child cat ids for a given cat id
 	$arr=$mytree->getAllChildId($lid);
 	$size = count($arr);
@@ -110,11 +110,11 @@ $rankings[$e]['title'] = '<a href="'.XOOPS_URL.'/modules/flashgames/game.php?lid
 // lowest score on top
 if ($gametype == 4 or $gametype == 2)
 {
-	$query .= ") order by score ASC";
+	$query .= ") ORDER BY score ASC";
   }
 else
 {
-  $query .= ") order by score DESC";
+  $query .= ") ORDER BY score DESC";
      
 }
 

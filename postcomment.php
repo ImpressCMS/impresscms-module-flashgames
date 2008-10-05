@@ -65,7 +65,7 @@ if(isset($_POST['op']))
 	
 			if(preg_match('/newcomment/i', $_SERVER['HTTP_REFERER']))
 			{
-				$xoopsDB->queryF('update '.$xoopsDB->prefix('flashgames_games').' set comments=comments+1 where lid=$item_id');
+				$xoopsDB->queryF('UPDATE '.$xoopsDB->prefix('flashgames_games').' set comments=comments+1 WHERE lid=$item_id');
 			}
 			redirect_header('game.php?lid='.$item_id.'&amp;comment_id='.$comment_id.'&amp;order='.$order.'&amp;mode='.$mode.'',2,_ALBM_THANKSFORPOST);
 		break;

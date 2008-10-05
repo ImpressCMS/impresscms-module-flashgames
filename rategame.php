@@ -51,7 +51,7 @@ if($_POST['submit']) {
 	$lid = $_POST['lid'];
     	// Check if Link POSTER is voting (UNLESS Anonymous users allowed to post)
     	if ($ratinguser != 0) {
-        	$result=$xoopsDB->query("select submitter from ".$xoopsDB->prefix("flashgames_games")." where lid=$lid");
+        	$result=$xoopsDB->query("SELECT submitter from ".$xoopsDB->prefix("flashgames_games")." WHERE lid=$lid");
         	while(list($ratinguserDB) = $xoopsDB->fetchRow($result)) {
         		if ($ratinguserDB == $ratinguser) {
 				redirect_header("index.php",4,_ALBM_CANTVOTEOWN);
@@ -60,7 +60,7 @@ if($_POST['submit']) {
         	}
 
     	// Check if REG user is trying to vote twice.
-    		$result=$xoopsDB->query("select ratinguser from ".$xoopsDB->prefix("flashgames_votedata")." where lid=$lid");
+    		$result=$xoopsDB->query("SELECT ratinguser from ".$xoopsDB->prefix("flashgames_votedata")." WHERE lid=$lid");
         	while(list($ratinguserDB) = $xoopsDB->fetchRow($result)) {
         		if ($ratinguserDB == $ratinguser) {
 				redirect_header("index.php",4,_ALBM_VOTEONCE2);
@@ -71,7 +71,7 @@ if($_POST['submit']) {
      	// Check if ANONYMOUS user is trying to vote more than once per day.
     	if ($ratinguser == 0){
     		$yesterday = (time()-(86400 * $anonwaitdays));
-        	$result=$xoopsDB->query("select count(*) FROM ".$xoopsDB->prefix("flashgames_votedata")." WHERE lid=$lid AND ratinguser=0 AND ratinghostname = '$ip' AND ratingtimestamp > $yesterday");
+        	$result=$xoopsDB->query("SELECT count(*) FROM ".$xoopsDB->prefix("flashgames_votedata")." WHERE lid=$lid AND ratinguser=0 AND ratinghostname = '$ip' AND ratingtimestamp > $yesterday");
     		list($anonvotecount) = $xoopsDB->fetchRow($result);
     		if ($anonvotecount > 0) {
 			redirect_header("index.php",4,_ALBM_VOTEONCE2);
@@ -84,7 +84,7 @@ if($_POST['submit']) {
         //All is well.  Add to Line Item Rate to DB.
 	$newid = $xoopsDB->genId($xoopsDB->prefix("flashgames_votedata")."_ratingid_seq");
 	$datetime = time();
-    	$xoopsDB->query("INSERT INTO ".$xoopsDB->prefix("flashgames_votedata")." (ratingid, lid, ratinguser, rating, ratinghostname, ratingtimestamp) VALUES ($newid, $lid, $ratinguser, $rating, '$ip', $datetime)") or $eh->show("0013");
+    	$xoopsDB->queryF("INSERT INTO ".$xoopsDB->prefix("flashgames_votedata")." (ratingid, lid, ratinguser, rating, ratinghostname, ratingtimestamp) VALUES ($newid, $lid, $ratinguser, $rating, '$ip', $datetime)") or $eh->show("0013");
         //All is well.  Calculate Score & Add to Summary (for quick retrieval & sorting) to DB.
         updaterating($lid);
 	$ratemessage = _ALBM_VOTEAPPRE."<br>".sprintf(_ALBM_THANKURATE,$xoopsConfig[sitename]);
@@ -95,7 +95,7 @@ if($_POST['submit']) {
 	
     	OpenTable();
     	mainheader();
-    	$result=$xoopsDB->query("select title from ".$xoopsDB->prefix("flashgames_games")." where lid=$lid");
+    	$result=$xoopsDB->query("SELECT title from ".$xoopsDB->prefix("flashgames_games")." WHERE lid=$lid");
 	list($title) = $xoopsDB->fetchRow($result);
 	
 	$title = $myts->makeTboxData4Show($title);

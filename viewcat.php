@@ -86,7 +86,7 @@ if(count($arr) > 0)
 if(!empty($xoopsUser) && $xoopsUser->isAdmin($xoopsModule->mid())) {$isadmin = true;}
 else {$isadmin = false;}
 
-$fullcountresult=$xoopsDB->query('select count(*) from '.$xoopsDB->prefix('flashgames_games').' where cid=$cid and status>0');
+$fullcountresult=$xoopsDB->query('SELECT count(*) from '.$xoopsDB->prefix('flashgames_games').' WHERE cid=$cid and status>0');
 list($numrows) = $xoopsDB->fetchRow($fullcountresult);
 $page_nav = '';
 if($numrows>0)
@@ -101,7 +101,7 @@ if($numrows>0)
 	$xoopsTpl->assign('lang_visit', _ALBM_VISIT);
 	$xoopsTpl->assign('show_links', true);
 	$xoopsTpl->assign('lang_comments', _COMMENTS);
-	$sql = 'select l.lid, l.cid, l.title, l.ext, l.res_x, l.res_y, l.status, l.date, l.hits, l.rating, l.votes, l.comments, l.members, t.description from '.$xoopsDB->prefix('flashgames_games').' l, '.$xoopsDB->prefix('flashgames_text').' t where cid=$cid and l.lid=t.lid and status>0 order by $orderby';
+	$sql = 'SELECT l.lid, l.cid, l.title, l.ext, l.res_x, l.res_y, l.status, l.date, l.hits, l.rating, l.votes, l.comments, l.members, t.description from '.$xoopsDB->prefix('flashgames_games').' l, '.$xoopsDB->prefix('flashgames_text').' t WHERE cid=$cid and l.lid=t.lid and status>0 ORDER BY $orderby';
 	$result=$xoopsDB->query($sql,$show,$min);
 
 	//if 2 or more items in result, show the sort menu

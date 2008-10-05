@@ -49,16 +49,16 @@ function update($lid, $cid, $title, $desc, $valid, $ext = "", $x = "", $y = "") 
 	global $myts, $xoopsDB, $xoopsConfig, $xoopsModule;
 
 	if($ext == "") {	
-		$xoopsDB->query("UPDATE ".$xoopsDB->prefix("myalbum_photos")." 
+		$xoopsDB->queryF("UPDATE ".$xoopsDB->prefix("myalbum_photos")." 
 			SET cid='$cid',title='$title', status='$valid', date=".time()." 
 			WHERE lid='$lid'");
 	} else {
-		$xoopsDB->query("UPDATE ".$xoopsDB->prefix("myalbum_photos")." 
+		$xoopsDB->queryF("UPDATE ".$xoopsDB->prefix("myalbum_photos")." 
 			SET cid='$cid',title='$title', status='$valid', date=
 			".time().", ext='$ext',res_x='$x',res_y='$y'   
 			WHERE lid='$lid'");
 	}
-	$xoopsDB->query("UPDATE ".$xoopsDB->prefix("myalbum_text")." SET 
+	$xoopsDB->queryF("UPDATE ".$xoopsDB->prefix("myalbum_text")." SET 
 		description='$desc' WHERE lid=".$lid."");
 
 	redirect_header("photo.php?lid=$lid",0);
@@ -67,15 +67,15 @@ function update($lid, $cid, $title, $desc, $valid, $ext = "", $x = "", $y = "") 
 if(isset($delete) and $delete != "") {
 
 	$delete = $myts->makeTareaData4Save($delete);
-	$result = $xoopsDB->query("SELECT l.lid, l.cid, l.title, l.ext, l.res_x, l.res_y, l.status, l.date, l.hits, l.rating, l.votes, l.comments, t.description FROM ".$xoopsDB->prefix("myalbum_photos")." l, ".$xoopsDB->prefix("myalbum_text")." t where l.lid=t.lid and l.lid=$delete ORDER BY date DESC",$flashgames_newlinks,0);
+	$result = $xoopsDB->query("SELECT l.lid, l.cid, l.title, l.ext, l.res_x, l.res_y, l.status, l.date, l.hits, l.rating, l.votes, l.comments, t.description FROM ".$xoopsDB->prefix("myalbum_photos")." l, ".$xoopsDB->prefix("myalbum_text")." t WHERE l.lid=t.lid and l.lid=$delete ORDER BY date DESC",$flashgames_newlinks,0);
 	list($lid, $cid, $ltitle, $ext, $res_x, $res_y, $status, $time, $hits, $rating, $votes, $comments, $description)=$xoopsDB->fetchRow($result);
 
 	$q = "DELETE FROM ".$xoopsDB->prefix("myalbum_photos")." WHERE lid = $delete";
-	$xoopsDB->query($q) or $eh->show("0013");
+	$xoopsDB->queryF($q) or $eh->show("0013");
 	$q = "DELETE FROM ".$xoopsDB->prefix("myalbum_text")." WHERE lid = $delete";
-	$xoopsDB->query($q) or $eh->show("0013");
+	$xoopsDB->queryF($q) or $eh->show("0013");
 	$q = "DELETE FROM ".$xoopsDB->prefix("myalbum_votedata")." WHERE lid = $delete";
-	$xoopsDB->query($q) or $eh->show("0013");
+	$xoopsDB->queryF($q) or $eh->show("0013");
 
 	// delete comments for this photo
 	$com = new XoopsComments($xoopsDB->prefix("myalbum_comments"));
@@ -209,7 +209,7 @@ if(isset($_POST['submit']) && $_POST['submit'] != ""){
     
    	OpenTable();
 
-	$result = $xoopsDB->query("SELECT l.lid, l.cid, l.title, l.ext, l.res_x, l.res_y, l.status, l.date, l.hits, l.rating, l.votes, l.comments, t.description FROM ".$xoopsDB->prefix("myalbum_photos")." l, ".$xoopsDB->prefix("myalbum_text")." t where l.lid=t.lid and l.lid=$lid ORDER BY date DESC",$flashgames_newlinks,0);
+	$result = $xoopsDB->query("SELECT l.lid, l.cid, l.title, l.ext, l.res_x, l.res_y, l.status, l.date, l.hits, l.rating, l.votes, l.comments, t.description FROM ".$xoopsDB->prefix("myalbum_photos")." l, ".$xoopsDB->prefix("myalbum_text")." t WHERE l.lid=t.lid and l.lid=$lid ORDER BY date DESC",$flashgames_newlinks,0);
 	list($lid, $cid, $ltitle, $ext, $res_x, $res_y, $status, $time, $hits, $rating, $votes, $comments, $description)=$xoopsDB->fetchRow($result);
 	include_once("../../../class/xoopsformloader.php");
 

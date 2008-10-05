@@ -42,6 +42,8 @@ function pausecomp(Amount) {
 		if( diff > Amount ) {break;}
 	}
 }
+
+
 function UpdateStatus( Div, Status ) {
 	Elem = document.getElementById(Div);
 	Elem.innerHTML = Status;
@@ -57,6 +59,8 @@ function UpdateCurrentBlock ( NewBlockID ) {
 	
 	OldBlock = NewBlock;
 }
+
+
 function ResetBlock ( BlockID ) {
 	NewBlock = document.getElementById( BlockID );
 	
@@ -138,7 +142,9 @@ function InstallGame($gameinfo, $licensekey, $cid, $uid, $localgamefile, $localg
 	}
 	
 	global $xoopsDB;
-	
+
+  $xoopsDB =& Database::getInstance();
+
 	if(empty($gameinfo['gameType'])){
 		$gameinfo['gameType'] = 1;
 	}
@@ -156,19 +162,19 @@ function InstallGame($gameinfo, $licensekey, $cid, $uid, $localgamefile, $localg
     			ext='swf',
     			license='$licensekey'";
 
-    mysql_query($sql);
-	$newid = mysql_insert_id();
+    $xoopsDB->queryF($sql);
+	$newid = $xoopsDB->getInsertId();
 
 	if($newid != 0){
 		$sql = "INSERT INTO ".$xoopsDB->prefix("flashgames_text")." SET lid=$newid, description='".addslashes($gameinfo['description'])."'";
-		$result = mysql_query($sql);
+		$result = $xoopsDB->queryF($sql);
 		
 		if($result === false){
 			// There was an error installing the file!
-	    	$output .= "$sql<br>".mysql_error();
+	    	$output .= "$sql<br>".$xoopsDB->error();
 			
 	    	//Remove the game record and files?
-	    	mysql_query("DELETE FROM ".$xoopsDB->prefix("flashgames_games")." WHERE lid=$newid");
+	    	$xoopsDB->queryF("DELETE FROM ".$xoopsDB->prefix("flashgames_games")." WHERE lid=$newid");
 	    	unlink($localgamefile);
 	    	unlink($localgamepic);
 	    	
@@ -386,7 +392,7 @@ foreach($installGames as $currgame){
 		}else{
 			// There was an error installing the file!
 			UpdateStatus($StatusDiv, 'Error Installing game');
-			$output .= "<pre>$sql\n".mysql_error()."</pre>";			
+			$output .= "<pre>$sql\n".$xoopsDB->error()."</pre>";
 	    	$output .= "Error installing game!<br>";
 		}
 	}else if($updateflag){

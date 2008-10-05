@@ -119,6 +119,8 @@ function convertorderbyin($orderby) {
     	if ($orderby == "ratingD")                        $orderby = "rating DESC";
     	return $orderby;
 }
+
+
 function convertorderbytrans($orderby) {
     	if ($orderby == "hits ASC")   $orderbyTrans = ""._ALBM_POPULARITYLTOM."";
     	if ($orderby == "hits DESC")    $orderbyTrans = ""._ALBM_POPULARITYMTOL."";
@@ -130,6 +132,8 @@ function convertorderbytrans($orderby) {
     	if ($orderby == "rating DESC") $orderbyTrans = ""._ALBM_RATINGHTOL."";
     	return $orderbyTrans;
 }
+
+
 function convertorderbyout($orderby) {
     	if ($orderby == "title ASC")            $orderby = "titleA";
     	if ($orderby == "date ASC")            $orderby = "dateA";
@@ -147,7 +151,7 @@ function convertorderbyout($orderby) {
 //updates rating data in itemtable for a given item
 function updaterating($sel_id){
 	global $xoopsDB;
-	$query = "select rating FROM ".$xoopsDB->prefix("flashgames_votedata")." WHERE lid = ".$sel_id."";
+	$query = "SELECT rating FROM ".$xoopsDB->prefix("flashgames_votedata")." WHERE lid = ".$sel_id."";
 	//echo $query;
 	$voteresult = $xoopsDB->query($query);
     	$votesDB = $xoopsDB->getRowsNum($voteresult);
@@ -159,7 +163,7 @@ function updaterating($sel_id){
 	$finalrating = number_format($finalrating, 4);
 	$query =  "UPDATE ".$xoopsDB->prefix("flashgames_games")." SET rating=$finalrating, votes=$votesDB WHERE lid = $sel_id";
 	//echo $query;
-    	$xoopsDB->query($query) or die();
+    	$xoopsDB->queryF($query) or die();
 }
 
 //returns the total number of items in items table that are accociated with a given table $table id
@@ -167,7 +171,7 @@ function getTotalItems($sel_id, $status=""){
 	global $xoopsDB, $mytree;
 	$count = 0;
 	$arr = array();
-	$query = "select count(*) from ".$xoopsDB->prefix("flashgames_games")." where cid=".$sel_id."";
+	$query = "SELECT count(*) from ".$xoopsDB->prefix("flashgames_games")." WHERE cid=".$sel_id."";
 	if($status!=""){
 		$query .= " and status>=$status";
 	}
@@ -177,7 +181,7 @@ function getTotalItems($sel_id, $status=""){
 	$arr = $mytree->getAllChildId($sel_id);
 	$size = sizeof($arr);
 	for($i=0;$i<$size;$i++){
-		$query2 = "select count(*) from ".$xoopsDB->prefix("flashgames_games")." where cid=".$arr[$i]."";
+		$query2 = "SELECT count(*) from ".$xoopsDB->prefix("flashgames_games")." WHERE cid=".$arr[$i]."";
 		if($status!=""){
 			$query2 .= " and status>=$status";
 		}
@@ -270,6 +274,8 @@ function ShowSubmitter($submitter) {
 //		echo "<BR>";
 	}
 }
+
+
 function get_DateTime ($string) { 
    $yyyy = substr($string, 0,4); 
    $month = substr($string, 5,2); 
@@ -288,6 +294,8 @@ function GetFooter(){
 		   "<div align='center'><a href='http://www.pnflashgames.com/linkback.php?type=xoops' target='_blank'><img src='".XOOPS_URL."/modules/flashgames/images/poweredByButton.gif' border='0'></a></div>";
 
 }
+
+
 function pnFlashGames_getDomain(){
     global $_SERVER;
     if(!empty($_SERVER['HTTP_HOST'])){
@@ -306,6 +314,8 @@ function pnFlashGames_getDomain(){
     $host = str_replace("www.", "", $host);
     return $host;
 }
+
+
 function pnFlashGames_getChecksum($file){
 	if($fp = fopen($file, 'r')){
 		$filecontent = fread($fp, filesize($file));
@@ -315,7 +325,12 @@ function pnFlashGames_getChecksum($file){
 		return false;
 	}
 }
+
+
 function pnFlashGames_storeScore($xoopsDB, $gid, $uname, $score, $ip){
+
+
+  //$xoopsDB =& Database::getInstance();
 	// Get the game's information
 	$checksql = "SELECT * FROM ".$xoopsDB->prefix("flashgames_games")." WHERE lid = $gid";
 	$result=$xoopsDB->query($checksql);
@@ -351,9 +366,9 @@ function pnFlashGames_storeScore($xoopsDB, $gid, $uname, $score, $ip){
     $checksql = "SELECT score FROM $scorestable
             	WHERE  name='$uname'
             	AND    lid=$gid";
-    $check = mysql_query($checksql);
+    $check = $xoopsDB->query($checksql);
 	
-    if(mysql_num_rows($check) < 1){
+    if($xoopsDB->getRowsNum($check) < 1){
         //No rows found, this user has not stored a high score for this game yet
         $sql = "INSERT INTO $scorestable
                 SET lid=$gid,
@@ -374,12 +389,12 @@ function pnFlashGames_storeScore($xoopsDB, $gid, $uname, $score, $ip){
 					$orderby = "ASC";
 					break;			
 			}
-//			$query = mysql_query("SELECT name, score FROM $scorestable where lid = '$gameid' ORDER BY score $orderby LIMIT 0, 1");
+//			$query = $xoopsDB->query("SELECT name, score FROM $scorestable WHERE lid = '$gameid' ORDER BY score $orderby LIMIT 0, 1");
 //			$row = mysql_fetch_row($query);
 //			if ($good_score) mysql_query("DELETE FROM $scorestable WHERE name='{$row[0]}'");
 		}
     }else{
-		$oldscore = mysql_fetch_array($check);
+		$oldscore = $xoopsDB->fetchArray($check);
 		$oldscore = $oldscore['score'];
         switch($gameInfo['gametype']){
             case '1':
@@ -415,18 +430,26 @@ function pnFlashGames_storeScore($xoopsDB, $gid, $uname, $score, $ip){
     }
     if($sql != ""){
         //Need to do something
-		mysql_query($sql);
+		$xoopsDB->queryF($sql);
     }
 	
     // Return true
     return true;
 }
+
+
 function pnFlashGames_countrows($xoopsDB, $table){
+
+  //$xoopsDB =& Database::getInstance();
 	$result = $xoopsDB->query("SELECT COUNT(1) as rowcount FROM $table");
 	$count = $xoopsDB->fetchArray($result);
 	return $count['rowcount'];
 }
+
+
 function pnFlashGames_saveGame($xoopsDB, $gid, $uname, $gameData){
+
+  //$xoopsDB =& Database::getInstance();
 	$savedgames = $xoopsDB->prefix("flashgames_savedGames");
     // First check to see if this user has stored game data for this game yet.
     // Each user is allowed to store one game data, so we check first to
@@ -434,8 +457,8 @@ function pnFlashGames_saveGame($xoopsDB, $gid, $uname, $gameData){
     $checksql = "SELECT COUNT(1) as rowcount FROM $savedgames
             	 WHERE  name='$uname'
             	 AND    lid=$gid";
-    $check = mysql_query($checksql);
-	$count = mysql_fetch_array($check);
+    $check = $xoopsDB->query($checksql);
+	$count = $xoopsDB->fetchArray($check);
 	$count = $count["rowcount"];
 
     if($count < 1){
@@ -457,20 +480,23 @@ function pnFlashGames_saveGame($xoopsDB, $gid, $uname, $gameData){
     if($sql != ""){
         //Need to do something
         //print "$sql<br>";
-		mysql_query($sql);
+		$xoopsDB->queryF($sql);
 		//print mysql_error();
     }
 
     // Check for an error with the database code, and if so set an appropriate
     // error message and return
-    if (mysql_errno() != 0) {
+    if ($xoopsDB->errno() != 0) {
         return false;
     }
 
     // Return true
     return true;
 }
+
+
 function pnFlashGames_loadGame($xoopsDB, $gid, $uname){
+  //$xoopsDB =& Database::getInstance();
 	$savedgames = $xoopsDB->prefix("flashgames_savedGames");
     
     $sql = "SELECT gamedata
@@ -478,23 +504,28 @@ function pnFlashGames_loadGame($xoopsDB, $gid, $uname){
             WHERE lid=$gid
             AND name='$uname'";
 
-    $result = mysql_query($sql);
+    $result = $xoopsDB->query($sql);
     
-    if (mysql_errno() != 0) {
+    if ($xoopsDB->errno() != 0) {
         return false;
     }
 
-    if (mysql_num_rows($result) < 1){
+    if ($xoopsDB->getRowsNum($result) < 1){
         //No data for this game and user yet...
         return "";
     }
     
-    $gameData = mysql_fetch_array($result);
+    $gameData = $xoopsDB->fetchArray($result);
     
     //Flash will unencode the data automatically, this way the data is sent back exactly as it came...
     return urlencode($gameData[0]);
 }
+
+
 function pnFlashGames_loadGameScores($xoopsDB, $gid){
+
+
+  //$xoopsDB =& Database::getInstance();
 	// Get the game's information
 	$checksql = "SELECT * FROM ".$xoopsDB->prefix("flashgames_games")." WHERE lid = $gid";
 	$result=$xoopsDB->query($checksql);
@@ -514,15 +545,15 @@ function pnFlashGames_loadGameScores($xoopsDB, $gid){
             WHERE lid=$gid
 			ORDER BY score $orderby";
 
-    $result = mysql_query($sql);
+    $result = $xoopsDB->query($sql);
 	
 	$output = "<scorelist>";
 	
-	if(mysql_num_rows($result) > 0){
+	if($xoopsDB->getRowsNum($result) > 0){
 		//Found some highscores
 		$dateInfo = getdate();
 		$rank = 1;
-		while($highscore = mysql_fetch_assoc($result)){
+		while($highscore = $xoopsDB->fetchArray($result)){
 			$output .= "<score rank='".$rank++."' score='{$highscore[score]}' player='{$highscore[name]}' date='".get_DateTime($highscore['date'])."' />\n";
 		}
 	}

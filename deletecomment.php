@@ -24,8 +24,8 @@ if ( !empty($ok) ) {
 		$gamecomment = new XoopsComments($xoopsDB->prefix("flashgames_comments"),$comment_id);
 		$deleted = $gamecomment->delete();
 		$item_id = $gamecomment->getVar("item_id");
-		list($numrows)=$xoopsDB->fetchRow($xoopsDB->query("select count(*) from ".$xoopsDB->prefix("flashgames_comments")." where item_id = $item_id"));
-		$xoopsDB->queryF("update ".$xoopsDB->prefix("flashgames_games")." set comments=$numrows where lid=$item_id ");
+		list($numrows)=$xoopsDB->fetchRow($xoopsDB->query("SELECT count(*) from ".$xoopsDB->prefix("flashgames_comments")." WHERE item_id = $item_id"));
+		$xoopsDB->queryF("UPDATE ".$xoopsDB->prefix("flashgames_games")." set comments=$numrows WHERE lid=$item_id ");
 	}
 	redirect_header("game.php?lid=".$item_id."&amp;order=".$order."&amp;mode=".$mode."",2,_ALBM_COMMENTSDEL);
 	exit();

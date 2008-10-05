@@ -72,18 +72,18 @@ if(isset($_POST['submit']) && $_POST['submit'] != "") {
 		$xc = new XoopsComments($xoopsDB->prefix($com_table));
 		$top_comments =& $xc->getAllComments(array('pid=0'));
 
-    	$xoopsDB->query('DELETE FROM '.$xoopsDB->prefix('xoopscomments').' WHERE com_modid = '.$moduleobj->getVar('mid'));
+    	$xoopsDB->queryF('DELETE FROM '.$xoopsDB->prefix('xoopscomments').' WHERE com_modid = '.$moduleobj->getVar('mid'));
 		foreach ($top_comments as $tc) {
 			$sql = sprintf("INSERT INTO %s (com_id, com_pid, com_modid, com_icon, com_title, com_text, com_created, com_modified, com_uid, com_ip, com_sig, com_itemid, com_rootid, com_status, dohtml, dosmiley, doxcode, doimage, dobr) VALUES (%u, %u, %u, '%s', '%s', '%s', %u, %u, %u, '%s', %u, %u, %u, %u, %u, %u, %u, %u, %u)", $xoopsDB->prefix('xoopscomments'), $tc->getVar('comment_id') + $offset, 0, $moduleobj->getVar('mid'), '', addslashes($tc->getVar('subject', 'n')), addslashes($tc->getVar('comment', 'n')), $tc->getVar('date'), $tc->getVar('date'), $tc->getVar('user_id'), $tc->getVar('ip'), 0, $tc->getVar('item_id'), $tc->getVar('comment_id') + $offset, XOOPS_COMMENT_ACTIVE, 0, 1, 1, 1, 1);
 
-			if (!$xoopsDB->query($sql)) {
+			if (!$xoopsDB->queryF($sql)) {
 				$content .= _NGIMG.sprintf("_INSTALL_L146", $tc->getVar('comment_id') + $offset).'<br />';
 			} else {
 				$content .= _OKIMG.sprintf("_INSTALL_L145", $tc->getVar('comment_id') + $offset).'<br />';
 				$child_comments = $tc->getCommentTree();
 				foreach ($child_comments as $cc) {
 					$sql = sprintf("INSERT INTO %s (com_id, com_pid, com_modid, com_icon, com_title, com_text, com_created, com_modified, com_uid, com_ip, com_sig, com_itemid, com_rootid, com_status, dohtml, dosmiley, doxcode, doimage, dobr) VALUES (%u, %u, %u, '%s', '%s', '%s', %u, %u, %u, '%s', %u, %u, %u, %u, %u, %u, %u, %u, %u)", $xoopsDB->prefix('xoopscomments'), $cc->getVar('comment_id') + $offset, $cc->getVar('pid') + $offset, $moduleobj->getVar('mid'), '', addslashes($cc->getVar('subject', 'n')), addslashes($cc->getVar('comment', 'n')), $cc->getVar('date'), $cc->getVar('date'), $cc->getVar('user_id'), $cc->getVar('ip'), 0, $cc->getVar('item_id'), $tc->getVar('comment_id') + $offset, XOOPS_COMMENT_ACTIVE, 0, 1, 1, 1, 1);
-					if (!$xoopsDB->query($sql)) {
+					if (!$xoopsDB->queryF($sql)) {
 						$content .= _NGIMG.sprintf("_INSTALL_L146", $cc->getVar('comment_id') + $offset).'<br />';
 					} else {
 						$content .= _OKIMG.sprintf("_INSTALL_L145", $cc->getVar('comment_id') + $offset).'<br />';

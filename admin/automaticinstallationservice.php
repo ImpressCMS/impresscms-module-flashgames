@@ -42,7 +42,11 @@ $eh = new ErrorHandler;
 $mytree = new XoopsTree($xoopsDB->prefix("flashgames_cat"),"cid","pid");
 
 
-global $xoopsDB;
+//global $xoopsDB;
+
+$xoopsDB =& Database::getInstance();
+
+
 xoops_cp_header();
 OpenTable();
 
@@ -64,8 +68,8 @@ $gamelist = $gameinfo["gamelist"];
 $message = $gameinfo["message"];
 
 $catlist = array();
-$catlist_rs = mysql_query("SELECT cid, title FROM ".$xoopsDB->prefix("flashgames_cat")." ORDER BY title");
-while($cat_row = mysql_fetch_assoc($catlist_rs)){
+$catlist_rs = $xoopsDB->query("SELECT cid, title FROM ".$xoopsDB->prefix("flashgames_cat")." ORDER BY title");
+while($cat_row = $xoopsDB->fetchArray($catlist_rs)){
 	$catlist[] = array("cid" => $cat_row["cid"],
 					   "title" => $cat_row["title"]);	
 }
@@ -89,27 +93,39 @@ function selectAll(formObj, value){
 		formObj.elements[i].checked = value;
 		
 }
+
+
 function loadPicWin(url){
 	pnfg_gamepicwin = window.open(url,"pnfg_gamepic","toolbar=no,location=no,directories=no,status=no,scrollbars=no,resizable=no,copyhistory=no,width=100,height=100");
 }
+
+
 function showPic(picurl, divid){
 	document.getElementById(divid).innerHTML = "<img src='" + picurl + "' width='100' height='100' border='0' onClick=\"hidePic('" + picurl + "', '" + divid + "');\">";
 }
+
+
 function hidePic(picurl, divid){
 	document.getElementById(divid).innerHTML = "<div id='" + divid + "'><a href=\"javascript:showPic('" + picurl + "', '" + divid + "');\">Show Pic</a></div>";
 }
+
+
 function hidediv(divid, gamename){
 	document.getElementById("container-" + divid).style.visibility = 'hidden';
 	document.getElementById("container-" + divid).style.display = 'none';
 	document.getElementById("header-" + divid).innerHTML = "<i><a href=\"javascript:showdiv('" + divid + "', '" + gamename + "');\">Show " + gamename + "</i></a>";
 	setCookie("container-" + divid + "-vis", "hidden");
 }
+
+
 function showdiv(divid, gamename){
 	document.getElementById("container-" + divid).style.visibility = 'visible';
 	document.getElementById("container-" + divid).style.display = 'block';
 	document.getElementById("header-" + divid).innerHTML = "<i><a href=\"javascript:hidediv('" + divid + "', '" + gamename + "');\">Hide " + gamename + "</i></a>";
 	setCookie("container-" + divid + "-vis", "visible");
 }
+
+
 function setCookie(name, value, expires, path, domain, secure)
 {
     document.cookie= name + "=" + escape(value) +
@@ -118,6 +134,8 @@ function setCookie(name, value, expires, path, domain, secure)
         ((domain) ? "; domain=" + domain : "") +
         ((secure) ? "; secure" : "");
 }
+
+
 function getCookie(name)
 {
     var dc = document.cookie;
@@ -139,6 +157,8 @@ function getCookie(name)
     }
     return unescape(dc.substring(begin + prefix.length, end));
 }
+
+
 function deleteCookie(name, path, domain)
 {
     if (getCookie(name))
@@ -155,9 +175,9 @@ function deleteCookie(name, path, domain)
 
 // Compile a list of checksums of games installed on this server
 $sql = "SELECT * FROM ".$xoopsDB->prefix("flashgames_games");
-$rsGames = mysql_query($sql);
+$rsGames = $xoopsDB->query($sql);
 $mygames=array();
-while($currgame = mysql_fetch_assoc($rsGames)){
+while($currgame = $xoopsDB->fetchArray($rsGames)){
 	$mygames[] = array("gamefile" => "../games/".$currgame['lid'].".".$currgame['ext']);
 }
 $mychecksums = array();

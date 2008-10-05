@@ -157,7 +157,7 @@ while($myrow = $xoopsDB->fetchArray($result)) {
 	$xoopsTpl->append('categories', array('image' => $imgurl, 'id' => $myrow['cid'], 'title' => $myts->makeTboxData4Show($myrow['title']), 'subcategories' => $subcategories, 'totallink' => $totallink, 'count' => $count));
 	$count++;
 }
-list($numrows) = $xoopsDB->fetchRow($xoopsDB->query("select count(*) from ".$xoopsDB->prefix("flashgames_games")." where status>0"));
+list($numrows) = $xoopsDB->fetchRow($xoopsDB->query("SELECT count(*) from ".$xoopsDB->prefix("flashgames_games")." WHERE status>0"));
 
 
 if ($xoopsUser && $xoopsUser->isAdmin($xoopsModule->mid())) {
@@ -188,7 +188,7 @@ $xoopsTpl->assign('lang_comments' , _COMMENTS);
 $xoopsTpl->assign('lang_membersonly' , _ALBM_MEMBERSONLY);
 
 
-$result = $xoopsDB->query("SELECT l.lid, l.cid, l.title, l.ext, l.res_x, l.res_y, l.status, l.date, l.hits, l.rating, l.votes, l.comments, l.members, l.submitter, t.description FROM ".$xoopsDB->prefix("flashgames_games")." l, ".$xoopsDB->prefix("flashgames_text")." t where l.status>0 and l.lid=t.lid ORDER BY date DESC", $flashgames_newlinks, 0);
+$result = $xoopsDB->query("SELECT l.lid, l.cid, l.title, l.ext, l.res_x, l.res_y, l.status, l.date, l.hits, l.rating, l.votes, l.comments, l.members, l.submitter, t.description FROM ".$xoopsDB->prefix("flashgames_games")." l, ".$xoopsDB->prefix("flashgames_text")." t WHERE l.status>0 and l.lid=t.lid ORDER BY date DESC", $flashgames_newlinks, 0);
 
 
 while(list($lid, $cid, $ltitle, $ext, $res_x, $res_y, $status, $time, $hits, $rating, $votes, $comments, $members, $submitter, $description) = $xoopsDB->fetchRow($result)) {

@@ -51,7 +51,7 @@ if ($item_id == "") {
 }
 
 
-$q = "select l.lid, l.cid, l.title, l.ext, l.res_x, l.res_y, l.bgcolor, l.status, l.members, l.date, l.hits, l.rating, l.votes, l.comments, l.submitter, t.description, l.gametype, l.license, l.classfile from ".$xoopsDB->prefix("flashgames_games")." l, ".$xoopsDB->prefix("flashgames_text")." t where l.lid=$lid and l.lid=t.lid and status>0";
+$q = "SELECT l.lid, l.cid, l.title, l.ext, l.res_x, l.res_y, l.bgcolor, l.status, l.members, l.date, l.hits, l.rating, l.votes, l.comments, l.submitter, t.description, l.gametype, l.license, l.classfile from ".$xoopsDB->prefix("flashgames_games")." l, ".$xoopsDB->prefix("flashgames_text")." t WHERE l.lid=$lid and l.lid=t.lid and status>0";
 $result=$xoopsDB->query($q);
 
 list($lid, $cid, $ltitle, $ext, $res_x, $res_y, $bgcolor, $status, $members, $time, $hits, $rating, $votes, $comments, $submitter, $description, $gametype, $license, $classfile)=$xoopsDB->fetchRow($result);
@@ -77,7 +77,7 @@ $pathstring .= $nicepath;
 $xoopsTpl->assign('category_path', $pathstring);
 
 // category navigation
-$fullcountresult=$xoopsDB->query("select lid from ".$xoopsDB->prefix("flashgames_games")." where cid=$cid and status>0");
+$fullcountresult=$xoopsDB->query("SELECT lid from ".$xoopsDB->prefix("flashgames_games")." WHERE cid=$cid and status>0");
 while (list($id) = $xoopsDB->fetchRow($fullcountresult)) {
 	$ids[] = $id;
 }
@@ -142,7 +142,7 @@ if ( $members == 1 ){
 
 
 if ($members <> 2){
-$xoopsDB->queryF("update ".$xoopsDB->prefix("flashgames_games")." set hits=hits+1 where lid=$lid and status>0");
+$xoopsDB->queryF("UPDATE ".$xoopsDB->prefix("flashgames_games")." set hits=hits+1 WHERE lid=$lid and status>0");
 }
 
 
@@ -182,7 +182,7 @@ $xoopsTpl->assign('game', array('id' => $lid, 'ext' => $ext, 'rating' => $rating
 'res_y' => $res_y, 'bgcolor' => $bgcolor, 'classfile' => $classfile, 'members' => $members));
 $xoopsTpl->assign('admin', $admin);
 $xoopsTpl->assign('game_title', $title);  // Oka
- $xoopsTpl->assign('lang_description', _ALBM_DESCRIPTIONC);
+$xoopsTpl->assign('lang_description', _ALBM_DESCRIPTIONC);
 $xoopsTpl->assign('lang_lastupdate', _ALBM_LASTUPDATEC);
 $xoopsTpl->assign('lang_hits', _ALBM_HITSC);
 $xoopsTpl->assign('lang_rating', _ALBM_RATINGC);
@@ -236,26 +236,26 @@ $xoopsTpl->assign(array(
 
 if ($gametype == 1)
 {
-$sql=sprintf("SELECT   g.score, g.name , g.date from %s g where g.lid = $lid order
+$sql=sprintf("SELECT   g.score, g.name , g.date from %s g WHERE g.lid = $lid order
 BY g.score DESC, g.name, g.date",$xoopsDB->prefix("flashgames_score"));
 }
 
 if ($gametype == 2)
 {
-$sql=sprintf("SELECT   g.score, g.name , g.date from %s g where g.lid = $lid order
+$sql=sprintf("SELECT   g.score, g.name , g.date from %s g WHERE g.lid = $lid order
 BY g.score ASC, g.name, g.date",$xoopsDB->prefix("flashgames_score"));
 } 
 
 if ($gametype == 3) 
 { 
-$sql=sprintf("SELECT   g.score, g.name , g.date from %s g where g.lid = $lid order
+$sql=sprintf("SELECT   g.score, g.name , g.date from %s g WHERE g.lid = $lid order
 BY g.score DESC, g.name, g.date",$xoopsDB->prefix("flashgames_score")); 
 $xoopsTpl->assign('lang_score' , "Zeit");
 }
 
 if ($gametype == 4)
 { 
-$sql=sprintf("SELECT   g.score, g.name , g.date from %s g where g.lid = $lid order
+$sql=sprintf("SELECT   g.score, g.name , g.date from %s g WHERE g.lid = $lid order
 BY g.score ASC, g.name, g.date",$xoopsDB->prefix("flashgames_score")); 
 $xoopsTpl->assign('lang_score' , "Zeit");
 }

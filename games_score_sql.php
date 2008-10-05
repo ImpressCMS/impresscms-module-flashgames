@@ -49,7 +49,7 @@ if(!isset($xoopsDB))
 }
 
 
-
+$xoopsDB =& Database::getInstance();
 
 # .. Neave Games MySQL/PHP high scores script
 # .. Requires at least PHP 4.1.0 and MySQL on your server
@@ -120,16 +120,16 @@ if (!isset($game_name)) error_msg('Could not access game table.');
 # Saving new score?
 if (isset($player_score) && is_numeric($player_score) && isset($player_name) && strlen($player_name) > 0 ) {
 	# Is this IP banned?
-#	$query = mysql_query('SELECT ip FROM games_banned_ip') or error_msg('Could not access database.');
+#	$query = $xoopsDB->query('SELECT ip FROM games_banned_ip') or error_msg('Could not access database.');
 #	while ($row = mysql_fetch_row($query)) {
 #		if ($player_ip == $row[0]) error_msg('Sorry, high scores have been disabled for your computer.');
 #	}
 
 	# Has this name played already?
-	$query = mysql_query("SELECT lid, name, score FROM $table_name") or error_msg('Could not access database.');
-	$num_rows = mysql_num_rows($query);
+	$query = $xoopsDB->query("SELECT lid, name, score FROM $table_name") or error_msg('Could not access database.');
+	$num_rows = $xoopsDB->getRowsNum($query);
 	$name_found = false;
-	while ($row = mysql_fetch_row($query)) {
+	while ($row = $xoopsDB->fetchRow($query)) {
 		if ($player_name == $row[1] && $gameid == $row[0] ) {
 			$name_found = true;
 			break;
@@ -147,15 +147,15 @@ if (isset($player_score) && is_numeric($player_score) && isset($player_name) && 
 
 if ($name_found) {
 		# If name already exists, and score is good enough, update it
-		if (((int)$player_score) > ((int)$row[2])) mysql_query("UPDATE $table_name SET score='$player_score'  WHERE lid = '$gameid' and  name='$player_name' ") or error_msg('Could not update score.');
+		if (((int)$player_score) > ((int)$row[2])) $xoopsDB->queryF("UPDATE $table_name SET score='$player_score'  WHERE lid = '$gameid' and  name='$player_name' ") or error_msg('Could not update score.');
 	}
 	else {
 		# If scores table is full, check score and delete lowest entry before inserting
 		if ($num_rows >= $table_max) {
-			$query = mysql_query("SELECT name, score FROM $table_name where lid = '$gameid' ORDER BY score ASC LIMIT 0, 1") or error_msg('Could not retrieve scores.');
-			$row = mysql_fetch_row($query);
+			$query = $xoopsDB->query("SELECT name, score FROM $table_name WHERE lid = '$gameid' ORDER BY score ASC LIMIT 0, 1") or error_msg('Could not retrieve scores.');
+			$row = $xoopsDB->fetchRow($query);
 			$good_score = (((int)$player_score) > ((int)$row[2]));
-			if ($good_score) mysql_query("DELETE FROM $table_name WHERE name='$row[0]'") or error_msg('Could not delete score.');
+			if ($good_score) $xoopsDB->queryF("DELETE FROM $table_name WHERE name='$row[0]'") or error_msg('Could not delete score.');
 		}
 		else $good_score = true;
 
@@ -163,7 +163,7 @@ if ($name_found) {
 
 
 		# Insert new name, score and ip
-		if ($good_score) mysql_query("INSERT INTO $table_name (lid, name, score, ip ) VALUES ('$gameid', '$player_name', '$player_score', '$player_ip')") or error_msg('Could not insert score.');
+		if ($good_score) $xoopsDB->queryF("INSERT INTO $table_name (lid, name, score, ip ) VALUES ('$gameid', '$player_name', '$player_score', '$player_ip')") or error_msg('Could not insert score.');
 	}
 }
 
@@ -173,11 +173,11 @@ if ($name_found) {
 
 
 # Return new scores table
-$query = mysql_query("SELECT name, score FROM $table_name  ORDER BY score DESC LIMIT 0, $display_max") or error_msg('Could not retrieve scores.');
+$query = $xoopsDB->query("SELECT name, score FROM $table_name  ORDER BY score DESC LIMIT 0, $display_max") or error_msg('Could not retrieve scores.');
 
 $i = 1;
 echo 'success=1&errorMsg=OK&maxScore=' . $display_max;
-while ($row = mysql_fetch_row($query)) {
+while ($row = $xoopsDB->fetchRow($query)) {
 	echo "&name$i=$row[0]&score$i=$row[1]";
 	$i++;
 }

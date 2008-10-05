@@ -49,19 +49,19 @@ else
 	$sortDB = 'hits';
 }
 $arr=array();
-$result=$xoopsDB->query('select cid, title from '.$xoopsDB->prefix('flashgames_cat').' where pid=0');
+$result=$xoopsDB->query('SELECT cid, title from '.$xoopsDB->prefix('flashgames_cat').' WHERE pid=0');
 while(list($cid,$ctitle)=$xoopsDB->fetchRow($result))
 {
 	$boxtitle = "<big>";
 	$boxtitle .= sprintf(_ALBM_TOP10,$ctitle);
 	$boxtitle .= " (".$sort.")</big>";
 	$thing = "<table width='100%' border='0'><tr><td width='10%' class='bg3'><b>"._ALBM_RANK."</b></td><td width='30%' class='bg3'><b>"._ALBM_TITLE."</b></td><td width='40%' class='bg3'><b>"._ALBM_CATEGORY."</b></td><td width='12%' class='bg3' align='center'><b>"._ALBM_HITS."</b></td><td width='12%' class='bg3' align='center'><b>"._ALBM_RATING."</b></td><td width='8%' class='bg3' align='right'><b>"._ALBM_VOTE."</b></td></tr>";
-	$query = "select lid, cid, title, hits, rating, votes from ".$xoopsDB->prefix("flashgames_games")." where status>0 and (cid=$cid";
+	$query = "SELECT lid, cid, title, hits, rating, votes FROM ".$xoopsDB->prefix("flashgames_games")." WHERE status>0 and (cid=$cid";
 	// get all child cat ids for a given cat id
 	$arr=$mytree->getAllChildId($cid);
 	$size = sizeof($arr);
 	for($i=0;$i<$size;$i++) {$query .= " or cid=".$arr[$i]."";}
-	$query .= ") order by ".$sortDB." DESC"; 
+	$query .= ") ORDER BY ".$sortDB." DESC"; 
 	$result2 = $xoopsDB->query($query,10,0);
 	$rank = 1;
 	while(list($lid,$lcid,$ltitle,$hits,$rating,$votes)=$xoopsDB->fetchRow($result2))

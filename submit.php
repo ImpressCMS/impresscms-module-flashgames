@@ -92,14 +92,14 @@ if(isset($_POST['submit']) && $_POST['submit'] !='')
 			if(!file_exists(XOOPS_ROOT_PATH.'/modules/flashgames/games/$tmp_name.$ext')) {$ext = strtolower($ext);}
 
 			$q = "INSERT INTO ".$xoopsDB->prefix('flashgames_games')." (lid, cid, title, ext, res_x, res_y, bgcolor, members, submitter, status, date, hits, rating, votes, comments,  gametype, license, classfile) VALUES ($newid, $cid, '$title', '$ext', '$res_x', '$res_y', '$bgcolor', '$membersonly', $submitter, $flashgames_managed, $date,  0, 0, 0, 0, '$gametype', '$license', '$classfile')";
-			$xoopsDB->query($q) or $eh->show('0013');
+			$xoopsDB->queryF($q) or $eh->show('0013');
 			if($newid == 0) {$newid = $xoopsDB->getInsertId();}
 
 			rename(XOOPS_ROOT_PATH.'/modules/flashgames/games/$tmp_name.$ext', XOOPS_ROOT_PATH.'/modules/flashgames/games/$newid.$ext');
 			rename(XOOPS_ROOT_PATH.'/modules/flashgames/games/$tmp_name.jpg', XOOPS_ROOT_PATH.'/modules/flashgames/games/$newid.jpg');
 			rename(XOOPS_ROOT_PATH.'/modules/flashgames/games/$tmp_name.gif', XOOPS_ROOT_PATH.'/modules/flashgames/games/$newid.gif');
 
-			$xoopsDB->query("INSERT INTO ".$xoopsDB->prefix('flashgames_text')." (lid, description) VALUES ($newid, '$description')") or $eh->show('0013');
+			$xoopsDB->queryF("INSERT INTO ".$xoopsDB->prefix('flashgames_text')." (lid, description) VALUES ($newid, '$description')") or $eh->show('0013');
 			redirect_header('index.php',2,_ALBM_RECEIVED.'');
 		}
 		else

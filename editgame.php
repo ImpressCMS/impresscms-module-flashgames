@@ -38,7 +38,7 @@ require_once XOOPS_ROOT_PATH.'/kernel/module.php';
 global $xoopsDB, $flashgames_allowdelete;
 
 $lid = intval($lid);
-$result = $xoopsDB->query("SELECT l.submitter FROM ".$xoopsDB->prefix('flashgames_games')." l, ".$xoopsDB->prefix('flashgames_text')." t where l.lid=$lid",0);
+$result = $xoopsDB->query("SELECT l.submitter FROM ".$xoopsDB->prefix('flashgames_games')." l, ".$xoopsDB->prefix('flashgames_text')." t WHERE l.lid=$lid",0);
 list($submitter) = $xoopsDB->fetchRow($result);
 
 include XOOPS_ROOT_PATH.'/modules/flashgames/cache/config.php';
@@ -67,20 +67,21 @@ $mytree = new XoopsTree($xoopsDB->prefix('flashgames_cat'),'cid','pid');
 function update($lid, $cid, $title,  $desc, $setdate, $valid, $membersonly, $gtyp, $license="", $classfile="",  $x = "", $y = "", $bgcolor="", $ext = "")
 {
 	global $myts, $xoopsDB, $xoopsConfig, $xoopsModule;
+  $xoopsDB =& Database::getInstance();
 
 	if(isset($setdate))
 	{
-		mysql_query("UPDATE ".$xoopsDB->prefix("flashgames_games")." 
+		$xoopsDB->queryF("UPDATE ".$xoopsDB->prefix("flashgames_games")." 
 			SET cid='$cid',title='$title', status='$valid', date=".time().", gametype='$gtyp', res_x='$x', res_y='$y', bgcolor='$bgcolor', license='$license', classfile='$classfile', members='$membersonly' 
 			WHERE lid='$lid'");
 	}
 	else
 	{
-		mysql_query("UPDATE ".$xoopsDB->prefix("flashgames_games")." 
+		$xoopsDB->queryF("UPDATE ".$xoopsDB->prefix("flashgames_games")." 
 			SET cid='$cid',title='$title', status='$valid', res_x='$x', res_y='$y', bgcolor='$bgcolor', gametype='$gtyp', license='$license', classfile='$classfile', members='$membersonly'  
 			WHERE lid='$lid'");
 	}
-	mysql_query("UPDATE ".$xoopsDB->prefix("flashgames_text")." SET 
+	$xoopsDB->queryF("UPDATE ".$xoopsDB->prefix("flashgames_text")." SET 
 		description='$desc' WHERE lid=".$lid."");
 
 	redirect_header("editgame.php?lid=$lid",0);
@@ -90,7 +91,7 @@ function update($lid, $cid, $title,  $desc, $setdate, $valid, $membersonly, $gty
 if(isset($clear)) {
 
 $q = "DELETE FROM ".$xoopsDB->prefix("flashgames_score")." WHERE lid = $lid";
-	$xoopsDB->queryf($q) or $eh->show("0013");
+	$xoopsDB->queryF($q) or $eh->show("0013");
 
 }
 
@@ -99,18 +100,18 @@ $q = "DELETE FROM ".$xoopsDB->prefix("flashgames_score")." WHERE lid = $lid";
 if(isset($delete) and $delete != "") {
 
 	$delete = $myts->makeTareaData4Save($delete);
-	$result = $xoopsDB->query("SELECT l.lid, l.cid, l.title, l.ext, l.res_x, l.bgcolor, l.res_y, l.status, l.date, l.hits, l.rating, l.votes, l.comments, t.description, l.license, l.classfile, l.members FROM ".$xoopsDB->prefix("flashgames_games")." l, ".$xoopsDB->prefix("flashgames_text")." t where l.lid=t.lid and l.lid=$delete ORDER BY date DESC",$flashgames_newlinks,0);
+	$result = $xoopsDB->query("SELECT l.lid, l.cid, l.title, l.ext, l.res_x, l.bgcolor, l.res_y, l.status, l.date, l.hits, l.rating, l.votes, l.comments, t.description, l.license, l.classfile, l.members FROM ".$xoopsDB->prefix("flashgames_games")." l, ".$xoopsDB->prefix("flashgames_text")." t WHERE l.lid=t.lid and l.lid=$delete ORDER BY date DESC",$flashgames_newlinks,0);
 	list($lid, $cid, $ltitle, $ext, $res_x, $res_y, $bgcolor, $status, $time, $hits, $rating, $votes, $comments, $description, $license, $classfile, $members)=$xoopsDB->fetchRow($result);
 
 	$q = "DELETE FROM ".$xoopsDB->prefix("flashgames_games")." WHERE lid = $delete";
-	$xoopsDB->queryf($q) or $eh->show("0013");
+	$xoopsDB->queryF($q) or $eh->show("0013");
 	$q = "DELETE FROM ".$xoopsDB->prefix("flashgames_text")." WHERE lid = $delete";
-	$xoopsDB->queryf($q) or $eh->show("0013");
+	$xoopsDB->queryF($q) or $eh->show("0013");
 	$q = "DELETE FROM ".$xoopsDB->prefix("flashgames_votedata")." WHERE lid = $delete";
-	$xoopsDB->queryf($q) or $eh->show("0013");
+	$xoopsDB->queryF($q) or $eh->show("0013");
 
 	$q = "DELETE FROM ".$xoopsDB->prefix("flashgames_score")." WHERE lid = $delete";
-	$xoopsDB->queryf($q) or $eh->show("0013");
+	$xoopsDB->queryF($q) or $eh->show("0013");
 
 	// delete comments for this photo
 	$com = new XoopsComments($xoopsDB->prefix("flashgames_comments"));
@@ -280,7 +281,7 @@ if (!$xoopsUser->isAdmin($xoopsModule->mid()) ) {
    include(XOOPS_ROOT_PATH."/header.php");
    	OpenTable();
 mainheader();
-	$result = $xoopsDB->query("SELECT l.lid, l.cid, l.title, l.ext, l.res_x, l.res_y, l.bgcolor, l.status, l.date, l.hits, l.rating, l.votes, l.comments, t.description, l.gametype, l.license, l.classfile, l.members FROM ".$xoopsDB->prefix("flashgames_games")." l, ".$xoopsDB->prefix("flashgames_text")." t where l.lid=t.lid and l.lid=$lid ORDER BY date DESC",$flashgames_newlinks,0);
+	$result = $xoopsDB->query("SELECT l.lid, l.cid, l.title, l.ext, l.res_x, l.res_y, l.bgcolor, l.status, l.date, l.hits, l.rating, l.votes, l.comments, t.description, l.gametype, l.license, l.classfile, l.members FROM ".$xoopsDB->prefix("flashgames_games")." l, ".$xoopsDB->prefix("flashgames_text")." t WHERE l.lid=t.lid and l.lid=$lid ORDER BY date DESC",$flashgames_newlinks,0);
 	list($lid, $cid, $ltitle, $ext, $res_x, $res_y, $bgcolor, $status, $time, $hits, $rating, $votes, $comments, $description,$gtype, $license, $classfile, $members)=$xoopsDB->fetchRow($result);
 	include_once("../../class/xoopsformloader.php");
 

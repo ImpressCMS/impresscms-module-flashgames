@@ -56,7 +56,7 @@ if(isset($_POST['submit']) && $_POST['submit'] != "") {
         redirect_header(XOOPS_URL."/modules/myalbum/admin/redothumbs.php",2,_ALBM_MUSTREGFIRST);
 	}
     
-    $result=$xoopsDB->query("select lid,ext from ".$xoopsDB->prefix("myalbum_photos")." order by lid LIMIT $i,$size") or die("Error");
+    $result=$xoopsDB->query("SELECT lid,ext from ".$xoopsDB->prefix("myalbum_photos")." ORDER BY lid LIMIT $i,$size") or die("Error");
     while($myrow = $xoopsDB->fetchArray($result)) {
         print _ALBM_REDOING.$myrow['lid'].".".$myrow['ext']."<br>\n";
         createThumb(XOOPS_ROOT_PATH."/modules/myalbum/photos/".$myrow['lid'].".".$myrow['ext'], $myrow['lid'], $myrow['ext']);

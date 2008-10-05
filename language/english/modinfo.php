@@ -7,7 +7,7 @@ define("_ALBM_MYLINKS_SMNAME4","Highscores");
 define("_ALBM_FLASHGAMES_NAME","FlashGames");
 
 // A brief description of this module
-define("_ALBM_FLASHGAMES_DESC","Creates a games section where users can search/submit/rate various games.");
+define("_ALBM_FLASHGAMES_DESC","Creates a games section WHERE users can search/submit/rate various games.");
 
 // Names of blocks for this module (Not all module has blocks)
 define("_ALBM_MYLINKS_BNAME1","Recent Games");

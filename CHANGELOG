@@ -1,4 +1,10 @@
-31-09-2008
+05-10-2008
+- fixed: module could not be installed due to a bug in the create table statement (Invalid default value for 'res_x') and a parse error in admin_header
+
+- changed: Changed all mysql_ function calls to their proper DataBase class functions, query() for SELECT and queryF() for INSERT, UPDATE and DELETE queries
+
+
+30-09-2008
 
 - added: patched game.php to address SQLInjection Vulnerability in lid parameter.
 

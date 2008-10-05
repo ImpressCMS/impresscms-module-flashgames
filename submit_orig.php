@@ -96,7 +96,7 @@ if(isset($_POST['submit']) && $_POST['submit'] != ""){
 //            print XOOPS_ROOT_PATH."/modules/myalbum/photos/$tmp_name.$ext<<<<br>";
 			$dim = GetImageSize(XOOPS_ROOT_PATH."/modules/myalbum/photos/$tmp_name.$ext");
 			$q = "INSERT INTO ".$xoopsDB->prefix("myalbum_photos")." (lid, cid, title, ext, res_x, res_y, submitter, status, date, hits, rating, votes, comments) VALUES ($newid, $cid, '$title', '$ext', '$dim[0]', '$dim[1]', $submitter, $myalbum_managed, $date, 0, 0, 0, 0)";
-    			$xoopsDB->query($q) or $eh->show("0013");
+    			$xoopsDB->queryF($q) or $eh->show("0013");
 			if($newid == 0){
 				$newid = $xoopsDB->getInsertId();
 			}
@@ -104,7 +104,7 @@ if(isset($_POST['submit']) && $_POST['submit'] != ""){
        			XOOPS_ROOT_PATH."/modules/myalbum/photos/$newid.$ext");
             
 			createThumb(XOOPS_ROOT_PATH."/modules/myalbum/photos/$newid.$ext", $newid, $ext);
-    		$xoopsDB->query("INSERT INTO ".$xoopsDB->prefix("myalbum_text")." (lid, description) VALUES ($newid, '$description')") or $eh->show("0013");
+   		$xoopsDB->queryF("INSERT INTO ".$xoopsDB->prefix("myalbum_text")." (lid, description) VALUES ($newid, '$description')") or $eh->show("0013");
 			redirect_header("index.php",2,_ALBM_RECEIVED."");
 			exit();
 		} else {

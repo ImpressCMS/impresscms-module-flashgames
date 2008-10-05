@@ -46,7 +46,7 @@ function flashgames() {
 	xoops_cp_header();
 	OpenTable();
 
-	$result3 = $xoopsDB->query("select count(*) from ".$xoopsDB->prefix("flashgames_games")." where status=0");
+	$result3 = $xoopsDB->query("SELECT count(*) from ".$xoopsDB->prefix("flashgames_games")." WHERE status=0");
     	list($totalnewlinks) = $xoopsDB->fetchRow($result3);
 	if($totalnewlinks>0){
 		$totalnewlinks = "<font color=\"#ff0000\"><b>$totalnewlinks</b></font>";
@@ -65,7 +65,7 @@ function flashgames() {
 	//echo " - <a href=upgrade2xoops2.php>"._ALBM_IMPORTCOMMENTS."</a>";
     // Oka End
 	
-	$result=$xoopsDB->query("select count(*) from ".$xoopsDB->prefix("flashgames_games")." where status>0");
+	$result=$xoopsDB->query("SELECT count(*) from ".$xoopsDB->prefix("flashgames_games")." WHERE status>0");
         list($numrows) = $xoopsDB->fetchRow($result);
 	echo "<br><br><div align=\"center\">";
 	printf(_ALBM_THEREAREADMIN1,$numrows);	echo "</div>";
@@ -78,7 +78,7 @@ function flashgames() {
 function listNewLinks(){
 	global $xoopsDB, $xoopsConfig, $myts, $eh, $mytree;
 	$mytree = new XoopsTree($xoopsDB->prefix("flashgames_cat"),"cid","pid");
-  	$result = $xoopsDB->query("select lid, cid, title, submitter from ".$xoopsDB->prefix("flashgames_games")." where status=0 order by date DESC");
+  	$result = $xoopsDB->query("SELECT lid, cid, title, submitter from ".$xoopsDB->prefix("flashgames_games")." WHERE status=0 ORDER BY date DESC");
    	$numrows = $xoopsDB->getRowsNum($result);
 	xoops_cp_header();
 
@@ -86,7 +86,7 @@ function listNewLinks(){
    	if ($numrows>0) {
 		while(list($lid, $cid, $title, $submitterid) = $xoopsDB->fetchRow($result)) {
 			OpenTable();
-			$result2 = $xoopsDB->query("select description from ".$xoopsDB->prefix("flashgames_text")." where lid=$lid");
+			$result2 = $xoopsDB->query("SELECT description from ".$xoopsDB->prefix("flashgames_text")." WHERE lid=$lid");
 			list($description) = $xoopsDB->fetchRow($result2);
 			$title = $myts->makeTboxData4Edit($title);
 			$description = $myts->makeTareaData4Edit($description);
@@ -108,6 +108,10 @@ function listNewLinks(){
 
 function linksConfigMenu(){
 	global $xoopsDB,$xoopsConfig, $myts, $eh, $mytree;
+
+  $xoopsDB =& Database::getInstance();
+
+
 // Add a New Main Category
 	xoops_cp_header();
     	OpenTable();
@@ -120,7 +124,7 @@ function linksConfigMenu(){
     	CloseTable();
     	echo "<br>";
 // Add a New Sub-Category
-    	$result=$xoopsDB->query("select count(*) from ".$xoopsDB->prefix("flashgames_cat")."");
+    	$result=$xoopsDB->query("SELECT count(*) from ".$xoopsDB->prefix("flashgames_cat")."");
 	list($numrows)=$xoopsDB->fetchRow($result);
     	if ($numrows>0) {
 		OpenTable();
@@ -148,13 +152,13 @@ function linksConfigMenu(){
 		echo "<br>";
     	}
 // Modify Game
-    	$result2 = mysql_query("SELECT lid, title FROM ".$xoopsDB->prefix("flashgames_games")." ORDER BY title");
+    	$result2 = $xoopsDB->query("SELECT lid, title FROM ".$xoopsDB->prefix("flashgames_games")." ORDER BY title");
     	//list($numrows2) = $xoopsDB->fetchRow($result2);
 		OpenTable();
 		echo "<form method=get action=\"../editgame.php\">\n";
 		echo "<h4>"._ALBM_MODLINK."</h4><br>\n";
     	echo _ALBM_LINKID."<select name=lid>";
-    	while($game = mysql_fetch_assoc($result2)){
+    	while($game = $xoopsDB->fetchArray($result2)){
     		echo "<option value='{$game[lid]}'>{$game[title]}</option>";
     	}
     	echo "</select>";
@@ -176,7 +180,7 @@ function modLink() {
     	$lid = $_GET['lid'];
 		xoops_cp_header();
     	OpenTable();
-    	$result = $xoopsDB->query("select cid, title, url, email, logourl from ".$xoopsDB->prefix("flashgames_links")." where lid=$lid") or $eh->show("0013");
+    	$result = $xoopsDB->query("SELECT cid, title, url, email, logourl from ".$xoopsDB->prefix("flashgames_links")." WHERE lid=$lid") or $eh->show("0013");
     	echo "<h4>"._ALBM_MODLINK."</h4><br>";
     	list($cid, $title, $url, $email, $logourl) = $xoopsDB->fetchRow($result); 
     	$title = $myts->makeTboxData4Edit($title);
@@ -185,7 +189,7 @@ function modLink() {
     	$email = $myts->makeTboxData4Edit($email);
     	$logourl = $myts->makeTboxData4Edit($logourl);
 //  	$logourl = urldecode($logourl);
-    	$result2 = $xoopsDB->query("select description from ".$xoopsDB->prefix("flashgames_text")." where lid=$lid"); 
+    	$result2 = $xoopsDB->query("SELECT description from ".$xoopsDB->prefix("flashgames_text")." WHERE lid=$lid"); 
     	list($description)=$xoopsDB->fetchRow($result2);
     	$description = $myts->makeTareaData4Edit($description);
 	echo "<table>";
@@ -287,15 +291,17 @@ function delVote() {
     	global $xoopsDB, $_GET, $eh;
     	$rid = $_GET['rid'];
     	$lid = $_GET['lid'];
-    	$query = "delete from ".$xoopsDB->prefix("flashgames_votedata")." where ratingid=$rid";
-    	$xoopsDB->query($query) or $eh->show("0013");
+    	$query = "DELETE FROM ".$xoopsDB->prefix("flashgames_votedata")." WHERE ratingid=$rid";
+    	$xoopsDB->queryF($query) or $eh->show("0013");
     	updaterating($lid);
     	redirect_header("index.php",1,_ALBM_VOTEDELETED);
     	exit();
 }
+
+
 function listBrokenLinks() {
     	global $xoopsDB, $eh;
-    	$result = $xoopsDB->query("select * from ".$xoopsDB->prefix("flashgames_broken")." group by lid order by reportid DESC");
+    	$result = $xoopsDB->query("SELECT * from ".$xoopsDB->prefix("flashgames_broken")." group by lid ORDER BY reportid DESC");
     	$totalbrokenlinks = $xoopsDB->getRowsNum($result);
 	xoops_cp_header();
 	OpenTable();
@@ -318,14 +324,14 @@ function listBrokenLinks() {
           	<td><b>" ._ALBM_DELETE."</b></td>
         	</tr>";
         	while(list($reportid, $lid, $sender, $ip)=$xoopsDB->fetchRow($result)){
-    			$result2 = $xoopsDB->query("select title, url, submitter from ".$xoopsDB->prefix("flashgames_links")." where lid=$lid");
+    			$result2 = $xoopsDB->query("SELECT title, url, submitter from ".$xoopsDB->prefix("flashgames_links")." WHERE lid=$lid");
 			if ($sender != 0) {
-				$result3 = $xoopsDB->query("select uname, email from ".$xoopsDB->prefix("users")." where uid=$sender");
+				$result3 = $xoopsDB->query("SELECT uname, email from ".$xoopsDB->prefix("users")." WHERE uid=$sender");
 				list($uname, $email)=$xoopsDB->fetchRow($result3);
 			}
     			list($title, $url, $ownerid)=$xoopsDB->fetchRow($result2);
 //			$url=urldecode($url);
-    			$result4 = $xoopsDB->query("select uname, email from ".$xoopsDB->prefix("users")." where uid='$ownerid'");
+    			$result4 = $xoopsDB->query("SELECT uname, email from ".$xoopsDB->prefix("users")." WHERE uid='$ownerid'");
     			list($owner, $owneremail)=$xoopsDB->fetchRow($result4);
     			echo "<tr><td bgcolor=$colorswitch><a href=$url>$title</a></td>";
     			if ($email=='') { echo "<td bgcolor=\"".$colorswitch."\">".$sender." (".$ip.")"; 
@@ -357,26 +363,32 @@ function listBrokenLinks() {
 	CloseTable();
 	xoops_cp_footer();
 }
+
+
 function delBrokenLinks() {
     	global $xoopsDB, $_GET, $eh;
     	$lid = $_GET['lid'];
-    	$query = "delete from ".$xoopsDB->prefix("flashgames_broken")." where lid=$lid";
-    	$xoopsDB->query($query) or $eh->show("0013");
-    	$query = "delete from ".$xoopsDB->prefix("flashgames_links")." where lid=$lid";
-    	$xoopsDB->query($query) or $eh->show("0013");
+    	$query = "DELETE FROM ".$xoopsDB->prefix("flashgames_broken")." WHERE lid=$lid";
+    	$xoopsDB->queryF($query) or $eh->show("0013");
+    	$query = "DELETE FROM ".$xoopsDB->prefix("flashgames_links")." WHERE lid=$lid";
+    	$xoopsDB->queryF($query) or $eh->show("0013");
     	redirect_header("index.php",1,_ALBM_LINKDELETED);
 	exit();
 }
+
+
 function ignoreBrokenLinks() {
     	global $xoopsDB, $_GET, $eh;
-    	$query = "delete from ".$xoopsDB->prefix("flashgames_broken")." where lid=".$_GET['lid']."";
-    	$xoopsDB->query($query) or $eh->show("0013");
+    	$query = "DELETE FROM ".$xoopsDB->prefix("flashgames_broken")." WHERE lid=".$_GET['lid']."";
+    	$xoopsDB->queryF($query) or $eh->show("0013");
     	redirect_header("index.php",1,_ALBM_BROKENDELETED);
 	exit();
 }
+
+
 function listModReq() {
     	global $xoopsDB, $myts, $eh, $mytree, $flashgames_shotwidth, $flashgames_useshots;
-    	$result = $xoopsDB->query("select * from ".$xoopsDB->prefix("flashgames_mod")." order by requestid");
+    	$result = $xoopsDB->query("SELECT * from ".$xoopsDB->prefix("flashgames_mod")." ORDER BY requestid");
     	$totalmodrequests = $xoopsDB->getRowsNum($result);
 	xoops_cp_header();
 	OpenTable();
@@ -384,12 +396,12 @@ function listModReq() {
 	if($totalmodrequests>0){
     		echo "<table width=95%><tr><td>";
     		while(list($requestid, $lid, $cid, $title, $url, $email, $logourl, $description, $submitterid)=$xoopsDB->fetchRow($result)) {
-			$result2 = $xoopsDB->query("select cid, title, url, email, logourl, submitter from ".$xoopsDB->prefix("flashgames_links")." where lid=$lid");
+			$result2 = $xoopsDB->query("SELECT cid, title, url, email, logourl, submitter from ".$xoopsDB->prefix("flashgames_links")." WHERE lid=$lid");
 			list($origcid, $origtitle, $origurl, $origemail, $origlogourl, $ownerid)=$xoopsDB->fetchRow($result2);
-			$result2 = $xoopsDB->query("select description from ".$xoopsDB->prefix("flashgames_text")." where lid=$lid");
+			$result2 = $xoopsDB->query("SELECT description from ".$xoopsDB->prefix("flashgames_text")." WHERE lid=$lid");
 			list($origdescription) = $xoopsDB->fetchRow($result2);
-			$result7 = $xoopsDB->query("select uname, email from ".$xoopsDB->prefix("users")." where uid='$submitterid'");
-			$result8 = $xoopsDB->query("select uname, email from ".$xoopsDB->prefix("users")." where uid='$ownerid'");
+			$result7 = $xoopsDB->query("SELECT uname, email from ".$xoopsDB->prefix("users")." WHERE uid='$submitterid'");
+			$result8 = $xoopsDB->query("SELECT uname, email from ".$xoopsDB->prefix("users")." WHERE uid='$ownerid'");
 			$cidtitle=$mytree->getPathFromId($cid, "title");
 			$origcidtitle=$mytree->getPathFromId($origcid, "title");
 			list($submitter, $submitteremail)=$xoopsDB->fetchRow($result7);
@@ -476,10 +488,12 @@ function listModReq() {
 	CloseTable();
 	xoops_cp_footer();
 }
+
+
 function changeModReq() {
     	global $xoopsDB, $_GET, $eh, $myts;
     	$requestid = $_GET['requestid'];
-    	$query = "select lid, cid, title, url, email, logourl, description from ".$xoopsDB->prefix("flashgames_mod")." where requestid=".$requestid."";
+    	$query = "SELECT lid, cid, title, url, email, logourl, description from ".$xoopsDB->prefix("flashgames_mod")." WHERE requestid=".$requestid."";
     	$result = $xoopsDB->query($query);
     	while(list($lid, $cid, $title, $url, $email, $logourl, $description)=$xoopsDB->fetchRow($result)) {
 	if (get_magic_quotes_runtime()) {
@@ -494,19 +508,21 @@ function changeModReq() {
     	$email = addslashes($email);
     	$logourl = addslashes($logourl);
     	$description = addslashes($description);
-    	$xoopsDB->query("UPDATE ".$xoopsDB->prefix("flashgames_links")." SET cid='$cid',title='$title',url='$url',email='$email',logourl='$logourl', status=2, date=".time()." WHERE lid='$lid'")
+    	$xoopsDB->queryF("UPDATE ".$xoopsDB->prefix("flashgames_links")." SET cid='$cid',title='$title',url='$url',email='$email',logourl='$logourl', status=2, date=".time()." WHERE lid='$lid'")
       or $eh->show("0013");
-	$xoopsDB->query("UPDATE ".$xoopsDB->prefix("flashgames_text")." SET description='$description' WHERE lid=".$lid."")
+	$xoopsDB->queryF("UPDATE ".$xoopsDB->prefix("flashgames_text")." SET description='$description' WHERE lid=".$lid."")
       or $eh->show("0013");
-    	$xoopsDB->query("delete from ".$xoopsDB->prefix("flashgames_mod")." where requestid='$requestid'") or $eh->show("0013");
+    	$xoopsDB->queryF("DELETE FROM ".$xoopsDB->prefix("flashgames_mod")." WHERE requestid='$requestid'") or $eh->show("0013");
     	}
     	redirect_header("index.php",1,_ALBM_DBUPDATED);
 	exit();
 }
+
+
 function ignoreModReq() {
     	global $xoopsDB, $_GET, $eh;
-    	$query= "delete from ".$xoopsDB->prefix("flashgames_mod")." where requestid=".$_GET['requestid']."";
-    	$xoopsDB->query($query) or $eh->show("0013");
+    	$query= "DELETE FROM ".$xoopsDB->prefix("flashgames_mod")." WHERE requestid=".$_GET['requestid']."";
+    	$xoopsDB->queryF($query) or $eh->show("0013");
     	redirect_header("index.php",1,_ALBM_MODREQDELETED);
 	exit();
 }
@@ -524,29 +540,33 @@ function modLinkS() {
     	$email = $myts->makeTboxData4Save($_POST["email"]);
     	
     	$description = $myts->makeTareaData4Save($_POST["description"]);
-    	$xoopsDB->query("update ".$xoopsDB->prefix("flashgames_links")." set cid='$cid', title='$title', url='$url', email='$email', logourl='$logourl', status=2, date=".time()." where lid=".$_POST['lid']."")  or $eh->show("0013");
-    	$xoopsDB->query("update ".$xoopsDB->prefix("flashgames_text")." set description='$description' where lid=".$_POST['lid']."")  or $eh->show("0013");
+    	$xoopsDB->queryF("UPDATE ".$xoopsDB->prefix("flashgames_links")." set cid='$cid', title='$title', url='$url', email='$email', logourl='$logourl', status=2, date=".time()." WHERE lid=".$_POST['lid']."")  or $eh->show("0013");
+    	$xoopsDB->queryF("UPDATE ".$xoopsDB->prefix("flashgames_text")." set description='$description' WHERE lid=".$_POST['lid']."")  or $eh->show("0013");
     	redirect_header("index.php",1,_ALBM_DBUPDATED);
 	exit();
 }
+
+
 function delLink() {
    	global $xoopsDB, $_GET, $eh;
-   	$query = "delete from ".$xoopsDB->prefix("flashgames_links")." where lid=".$_GET['lid']."";
-   	$xoopsDB->query($query) or $eh->show("0013");
-	$query = "delete from ".$xoopsDB->prefix("flashgames_text")." where lid=".$_GET['lid']."";
-	$xoopsDB->query($query) or $eh->show("0013");
-	$query = "delete from ".$xoopsDB->prefix("flashgames_votedata")." where lid=".$_GET['lid']."";
-	$xoopsDB->query($query) or $eh->show("0013");
+   	$query = "DELETE FROM ".$xoopsDB->prefix("flashgames_links")." WHERE lid=".$_GET['lid']."";
+   	$xoopsDB->queryF($query) or $eh->show("0013");
+	$query = "DELETE FROM ".$xoopsDB->prefix("flashgames_text")." WHERE lid=".$_GET['lid']."";
+	$xoopsDB->queryF($query) or $eh->show("0013");
+	$query = "DELETE FROM ".$xoopsDB->prefix("flashgames_votedata")." WHERE lid=".$_GET['lid']."";
+	$xoopsDB->queryF($query) or $eh->show("0013");
     	redirect_header("index.php",1,_ALBM_LINKDELETED);
 	exit();
 }
+
+
 function modCat() {
     	global $xoopsDB, $_POST, $myts, $eh, $mytree;
     	$cid = $_POST["cid"];
 	xoops_cp_header();
     	OpenTable();
     	echo "<h4>"._ALBM_MODCAT."</h4><br>";
-	$result=$xoopsDB->query("select pid, title, imgurl from ".$xoopsDB->prefix("flashgames_cat")." where cid=$cid");
+	$result=$xoopsDB->query("SELECT pid, title, imgurl from ".$xoopsDB->prefix("flashgames_cat")." WHERE cid=$cid");
 	list($pid,$title,$imgurl) = $xoopsDB->fetchRow($result);
 	$title = $myts->makeTboxData4Edit($title);
 	$imgurl = $myts->makeTboxData4Edit($imgurl);
@@ -563,6 +583,8 @@ function modCat() {
     	CloseTable();
 	xoops_cp_footer();
 }
+
+
 function modCatS() {
     	global $xoopsDB, $_POST, $myts, $eh;
     	$cid =  $_POST['cid'];
@@ -571,9 +593,11 @@ function modCatS() {
 	if (($_POST["imgurl"]) || ($_POST["imgurl"]!="")) {
 		$imgurl = $myts->makeTboxData4Save($_POST["imgurl"]);
 	}
-	$xoopsDB->query("update ".$xoopsDB->prefix("flashgames_cat")." set pid=$pid, title='$title', imgurl='$imgurl' where cid=$cid") or $eh->show("0013");
+	$xoopsDB->queryF("UPDATE ".$xoopsDB->prefix("flashgames_cat")." set pid=$pid, title='$title', imgurl='$imgurl' WHERE cid=$cid") or $eh->show("0013");
     	redirect_header("index.php",1,_ALBM_DBUPDATED);
 }
+
+
 function delCat() {
     	global $xoopsDB, $_GET, $eh, $mytree;
     	$cid =  $_GET['cid'];
@@ -585,16 +609,16 @@ function delCat() {
 		$arr=$mytree->getAllChildId($cid);
 		for($i=0;$i<sizeof($arr);$i++){
 			//get all links in each subcategory
-			$result=$xoopsDB->query("select lid,ext from ".$xoopsDB->prefix("flashgames_games")." where cid=".$arr[$i]."") or $eh->show("0013");
+			$result=$xoopsDB->query("SELECT lid,ext from ".$xoopsDB->prefix("flashgames_games")." WHERE cid=".$arr[$i]."") or $eh->show("0013");
 			//now for each link, delete the text data and vote ata associated with the link
 			while(list($lid, $ext)=$xoopsDB->fetchRow($result)){
 				$delete = $lid;
 				$q = "DELETE FROM ".$xoopsDB->prefix("flashgames_games")." WHERE lid = $delete";
-				$xoopsDB->query($q) or $eh->show("0013");
+				$xoopsDB->queryF($q) or $eh->show("0013");
 				$q = "DELETE FROM ".$xoopsDB->prefix("flashgames_text")." WHERE lid = $delete";
-				$xoopsDB->query($q) or $eh->show("0013");
+				$xoopsDB->queryF($q) or $eh->show("0013");
 				$q = "DELETE FROM ".$xoopsDB->prefix("flashgames_votedata")." WHERE lid = $delete";
-				$xoopsDB->query($q) or $eh->show("0013");
+				$xoopsDB->queryF($q) or $eh->show("0013");
 				// delete comments for this game
 				$com = new XoopsComments($xoopsDB->prefix("flashgames_comments"));
 				$criteria = array("item_id=$delete", "pid=0");
@@ -608,18 +632,18 @@ function delCat() {
 				}
 			}
 			//all links for each subcategory is deleted, now delete the subcategory data
-    	    $xoopsDB->query("delete from ".$xoopsDB->prefix("flashgames_cat")." where cid=".$arr[$i]."") or $eh->show("0013");
+    	    $xoopsDB->queryF("DELETE FROM ".$xoopsDB->prefix("flashgames_cat")." WHERE cid=".$arr[$i]."") or $eh->show("0013");
 		}
 		//all subcategory and associated data are deleted, now delete category data and its associated data
-		$result=$xoopsDB->query("select lid, ext from ".$xoopsDB->prefix("flashgames_games")." where cid=".$cid."") or $eh->show("0013");
+		$result=$xoopsDB->query("SELECT lid, ext from ".$xoopsDB->prefix("flashgames_games")." WHERE cid=".$cid."") or $eh->show("0013");
 		while(list($lid, $ext)=$xoopsDB->fetchRow($result)){
 			$delete = $lid;
 			$q = "DELETE FROM ".$xoopsDB->prefix("flashgames_games")." WHERE lid = $delete";
-			$xoopsDB->query($q) or $eh->show("0013");
+			$xoopsDB->queryF($q) or $eh->show("0013");
 			$q = "DELETE FROM ".$xoopsDB->prefix("flashgames_text")." WHERE lid = $delete";
-			$xoopsDB->query($q) or $eh->show("0013");
+			$xoopsDB->queryF($q) or $eh->show("0013");
 			$q = "DELETE FROM ".$xoopsDB->prefix("flashgames_votedata")." WHERE lid = $delete";
-			$xoopsDB->query($q) or $eh->show("0013");
+			$xoopsDB->queryF($q) or $eh->show("0013");
 			// delete comments for this game
 			$com = new XoopsComments($xoopsDB->prefix("flashgames_comments"));
 			$criteria = array("item_id=$delete", "pid=0");
@@ -632,7 +656,7 @@ function delCat() {
 				unlink(XOOPS_ROOT_PATH."/modules/flashgames/games/thumbs/$delete.$ext");
 			}
 		}
-	    $xoopsDB->query("delete from ".$xoopsDB->prefix("flashgames_cat")." where cid=$cid") or $eh->show("0013");
+	    $xoopsDB->queryF("DELETE FROM ".$xoopsDB->prefix("flashgames_cat")." WHERE cid=$cid") or $eh->show("0013");
         redirect_header("index.php",1,_ALBM_CATDELETED);
 		exit();
     	} else {
@@ -650,14 +674,18 @@ function delCat() {
 		xoops_cp_footer();
     	}
 }
+
+
 function delNewLink() {
     	global $xoopsDB, $_GET, $eh;
-    	$query = "delete from ".$xoopsDB->prefix("flashgames_links")." where lid=".$_GET['lid']."";
-    	$xoopsDB->query($query) or $eh->show("0013");
-    	$query = "delete from ".$xoopsDB->prefix("flashgames_text")." where lid=".$_GET['lid']."";
-    	$xoopsDB->query($query) or $eh->show("0013");
+    	$query = "DELETE FROM ".$xoopsDB->prefix("flashgames_links")." WHERE lid=".$_GET['lid']."";
+    	$xoopsDB->queryF($query) or $eh->show("0013");
+    	$query = "DELETE FROM ".$xoopsDB->prefix("flashgames_text")." WHERE lid=".$_GET['lid']."";
+    	$xoopsDB->queryF($query) or $eh->show("0013");
 	redirect_header("index.php",1,_ALBM_LINKDELETED);
 }
+
+
 function addCat() {
     	global $xoopsDB, $_POST, $myts, $eh;
     	$pid = $_POST["cid"];
@@ -669,7 +697,7 @@ function addCat() {
 	}
     	$title = $myts->makeTboxData4Save($title);
 	$newid = $xoopsDB->genId($xoopsDB->prefix("flashgames_cat")."_cid_seq");
-    	$xoopsDB->query("INSERT INTO ".$xoopsDB->prefix("flashgames_cat")." (cid, pid, title, imgurl) VALUES ($newid, $pid, '$title', '$imgurl')") or $eh->show("0013");
+    	$xoopsDB->queryF("INSERT INTO ".$xoopsDB->prefix("flashgames_cat")." (cid, pid, title, imgurl) VALUES ($newid, $pid, '$title', '$imgurl')") or $eh->show("0013");
 	redirect_header("index.php?op=linksConfigMenu",1,_ALBM_NEWCATADDED);
 }
 
@@ -685,7 +713,7 @@ function addLink() {
     	$email = $myts->makeTboxData4Save($_POST["email"]);
     	$description = $myts->makeTareaData4Save($_POST["description"]);
     	$submitter = $xoopsUser->uid();
-    	$result = $xoopsDB->query("select count(*) from ".$xoopsDB->prefix("flashgames_links")." where url='$url'");
+    	$result = $xoopsDB->query("SELECT count(*) from ".$xoopsDB->prefix("flashgames_links")." WHERE url='$url'");
     	list($numrows) = $xoopsDB->fetchRow($result);
 	$errormsg = "";
 	$error = 0;
@@ -719,13 +747,15 @@ function addLink() {
 		$cid = 0;
 	}
 	$newid = $xoopsDB->genId($xoopsDB->prefix("flashgames_links")."_lid_seq");
-    	$xoopsDB->query("INSERT INTO ".$xoopsDB->prefix("flashgames_links")." (lid, cid, title, url, email, logourl, submitter, status, date, hits, rating, votes, comments) VALUES ($newid, $cid, '$title', '$url', '$email', '$logourl', $submitter, 1, ".time().", 0, 0, 0, 0)") or $eh->show("0013");
+    	$xoopsDB->queryF("INSERT INTO ".$xoopsDB->prefix("flashgames_links")." (lid, cid, title, url, email, logourl, submitter, status, date, hits, rating, votes, comments) VALUES ($newid, $cid, '$title', '$url', '$email', '$logourl', $submitter, 1, ".time().", 0, 0, 0, 0)") or $eh->show("0013");
 	if($newid == 0){
 		$newid = $xoopsDB->getInsertId();
 	}
-    	$xoopsDB->query("INSERT INTO ".$xoopsDB->prefix("flashgames_text")." (lid, description) VALUES ($newid, '$description')") or $eh->show("0013");
+    	$xoopsDB->queryF("INSERT INTO ".$xoopsDB->prefix("flashgames_text")." (lid, description) VALUES ($newid, '$description')") or $eh->show("0013");
     	redirect_header("index.php",1,_ALBM_NEWLINKADDED);
 }
+
+
 function approve(){
 	global $xoopsConfig, $xoopsDB, $_POST, $myts, $eh;
 	$lid = $_POST['lid'];
@@ -745,11 +775,11 @@ function approve(){
 	$title = $myts->makeTboxData4Save($title);
 	$email = $myts->makeTboxData4Save($email);
 	$description = $myts->makeTareaData4Save($description);
-	$query = "update ".$xoopsDB->prefix("flashgames_links")." set cid='$cid', title='$title', url='$url', email='$email', logourl='$logourl', status=1, date=".time()." where lid=".$lid."";
-	$xoopsDB->query($query) or $eh->show("0013");
-	$query = "update ".$xoopsDB->prefix("flashgames_text")." set description='$description' where lid=".$lid."";
-	$xoopsDB->query($query) or $eh->show("0013");
-	$result = $xoopsDB->query("select submitter from ".$xoopsDB->prefix("flashgames_links")." where lid=$lid");
+	$query = "UPDATE ".$xoopsDB->prefix("flashgames_links")." set cid='$cid', title='$title', url='$url', email='$email', logourl='$logourl', status=1, date=".time()." WHERE lid=".$lid."";
+	$xoopsDB->queryF($query) or $eh->show("0013");
+	$query = "UPDATE ".$xoopsDB->prefix("flashgames_text")." set description='$description' WHERE lid=".$lid."";
+	$xoopsDB->queryF($query) or $eh->show("0013");
+	$result = $xoopsDB->query("SELECT submitter from ".$xoopsDB->prefix("flashgames_links")." WHERE lid=$lid");
 	list($submitterid)=$xoopsDB->fetchRow($result);
 	$submitter = XoopsUser::getUnameFromId($submitterid);
 	$subject = sprintf(_ALBM_YOURLINK,$xoopsConfig['sitename']);

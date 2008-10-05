@@ -100,7 +100,7 @@ if ( $xoopsUser ){
 
 
 $arr=array();
-$result=$xoopsDB->query("select lid, title, gametype from ".$xoopsDB->prefix("flashgames_games")." where status=1 and  (gametype >0)");
+$result=$xoopsDB->query("SELECT lid, title, gametype from ".$xoopsDB->prefix("flashgames_games")." WHERE status=1 and  (gametype >0)");
 $e = 0;
 $count = 1;
 $rankings = array();
@@ -128,7 +128,7 @@ $orderedlist = array();
 
 while(list($lid, $title, $gametype)=$xoopsDB->fetchRow($result)){
 
-	$query = "select lid, name, score, date from ".$xoopsDB->prefix("flashgames_score")." where  (lid=$lid";
+	$query = "SELECT lid, name, score, date from ".$xoopsDB->prefix("flashgames_score")." WHERE  (lid=$lid";
 	// get all child cat ids for a given cat id
 	$arr=$mytree->getAllChildId($lid);
 	$size = count($arr);
@@ -140,11 +140,11 @@ while(list($lid, $title, $gametype)=$xoopsDB->fetchRow($result)){
 // lowest score on top
 if ($gametype == 4 or $gametype == 2)
 {
-	$query .= ") order by score ASC";
+	$query .= ") ORDER BY score ASC";
   }
 else
 {
-  $query .= ") order by score DESC";
+  $query .= ") ORDER BY score DESC";
      
 }
 

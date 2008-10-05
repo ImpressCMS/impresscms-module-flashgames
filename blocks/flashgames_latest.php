@@ -36,7 +36,7 @@ $rgame['title'] = $myts->makeTboxData4Show(substr($rgame['title'],0,(21 -1))).".
 
 
 // score table
-$result=$xoopsDB->query("select lid, title, gametype from ".$xoopsDB->prefix("flashgames_games")." where status=1 and lid  IN ($whr_lid)");
+$result=$xoopsDB->query("SELECT lid, title, gametype from ".$xoopsDB->prefix("flashgames_games")." WHERE status=1 and lid  IN ($whr_lid)");
 $rankings = array();
 while(list($lid, $title, $gametype)=$xoopsDB->fetchRow($result)){
 
@@ -68,16 +68,16 @@ $block['width']        =  $options[0] ;
 
 $gtype = $gametype;
 
-$query = "select lid, name, score, date from ".$xoopsDB->prefix("flashgames_score")." where  (lid=$whr_lid";
+$query = "SELECT lid, name, score, date from ".$xoopsDB->prefix("flashgames_score")." WHERE  (lid=$whr_lid";
 
 // lowest score on top
 if ($gametype == 4 or $gametype == 2)
 {
-	$query .= ") order by score ASC";
+	$query .= ") ORDER BY score ASC";
   }
 else
 {
-  $query .= ") order by score DESC";
+  $query .= ") ORDER BY score DESC";
      
 }
 
