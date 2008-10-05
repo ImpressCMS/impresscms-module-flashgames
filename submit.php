@@ -105,7 +105,7 @@ if(isset($_POST['submit']) && $_POST['submit'] !='')
 		else
 		{
 			$errors = $upload->getUploadErrors();
-			include XOOPS_ROOT_PATH.'/header.php');
+			include XOOPS_ROOT_PATH.'/header.php';
 			OpenTable();
 			mainheader();
 			echo '<p><strong>::Errors occured::</strong><br />\n';
